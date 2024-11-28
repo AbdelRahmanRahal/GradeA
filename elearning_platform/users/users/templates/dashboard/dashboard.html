@@ -1,0 +1,30 @@
+<!-- templates/dashboard/instructor_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+    <h1>Welcome, {{ request.user.username }}</h1>
+    <h2>Your Courses</h2>
+
+    {% for course_data in courses %}
+        <div class="course">
+            <h3>{{ course_data.course.title }}</h3>
+            <p>{{ course_data.course.description }}</p>
+            <p>Created at: {{ course_data.course.created_at }}</p>
+            <p>Total Students Enrolled: {{ course_data.student_count }}</p>
+
+            <h4>Enrolled Students:</h4>
+            <ul>
+                {% for enrollment in course_data.enrollments %}
+                    <li>{{ enrollment.student.username }} (Enrolled on {{ enrollment.enrolled_at }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</body>
+</html>

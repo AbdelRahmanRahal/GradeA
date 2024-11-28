@@ -3,9 +3,14 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm
+from .decorator import role_required
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import Course, Enrollment
 
 def register(request):
     if request.method == 'POST':
+
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
@@ -31,6 +36,32 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('login')
+
+
+
+@login_required
+def instructor_dashboard(request):
+    if request.user.role != "instructor":
+        return render(request, "403.html")  # Show forbidden page if not an instructor
+
+    # Get all courses taught by the instructor
+    courses = Course.objects.filter(instructor=request.user)
+
+    # Gather statistics for each course
+    course_data = []
+    for course in courses:
+        enrollments = Enrollment.objects.filter(course=course)
+        course_data.append({
+            "course": course,
+            "student_count": enrollments.count(),
+            "enrollments": enrollments,
+        })
+
+    context = {
+        "courses": course_data,
+    }
+    return render(request, "dashboard/instructor_dashboard.html", context)
+
 
 
 
