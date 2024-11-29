@@ -1,39 +1,33 @@
 from django import forms
-from django.contrib.auth.password_validation import validate_password  
+from django.contrib.auth.password_validation import validate_password
+from .models import CustomUser
 
-# User Registration Form definition
 class UserRegistrationForm(forms.ModelForm):
-    # Define password field with custom widget for password input
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': 'Enter password'}),  # Custom placeholder for password input
-        label="Password",  # Label for the password field
-        help_text="Your password must be at least 8 characters long.",  # Help text shown to the user
+        widget=forms.PasswordInput(attrs={'placeholder': 'Enter password'}),
+        label="Password",
+        help_text="Your password must be at least 8 characters long.",
     )
-    
-    # Define password confirmation field
     password_confirm = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': 'Confirm password'}),  # Custom placeholder for confirming password
-        label="Confirm Password",  # Label for the password confirmation field
+        widget=forms.PasswordInput(attrs={'placeholder': 'Confirm password'}),
+        label="Confirm Password",
     )
 
     class Meta:
-        model = CustomUser  # Specify that the form uses the CustomUser model
-        fields = ['username', 'email', 'role', 'password']  # Fields to be included in the form
+        model = CustomUser
+        fields = ['username', 'email', 'role', 'password']
 
-    # Custom method to validate the password field
     def clean_password(self):
-        password = self.cleaned_data.get("password")  # Get the password from cleaned data
-        validate_password(password)  # Django’s built-in function to validate password strength
-        return password  # Return the validated password
+        password = self.cleaned_data.get("password")
+        validate_password(password)  # Ensures password meets Django's security standards
+        return password
 
-    # Custom clean method to validate password confirmation matches the original password
     def clean(self):
-        cleaned_data = super().clean()  # Call parent clean method to get the cleaned data
-        password = cleaned_data.get("password")  # Get the password field
-        password_confirm = cleaned_data.get("password_confirm")  # Get the confirm password field
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        password_confirm = cleaned_data.get("password_confirm")
 
-        # Check if both password and password_confirm match
         if password and password_confirm and password != password_confirm:
-            self.add_error('password_confirm', "Passwords do not match")  # Add error if passwords don't match
+            self.add_error('password_confirm', "Passwords do not match")
 
-        return cleaned_data  # Return cleaned data to be used in form
+        return cleaned_data

@@ -17,17 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from users import views
+from django.conf.urls import handler404, handler500
+
+handler404 = 'users.views.custom_404_view'
+handler500 = 'users.views.custom_500_view'
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
      path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
-    path("instructor/dashboard/", views.instructor_dashboard, name="instructor_dashboard")
-
-
-
-
-   
-
+    path("instructor/dashboard/", views.instructor_dashboard, name="instructor_dashboard"),
+path('', views.index_view, name='index'),
 ]
