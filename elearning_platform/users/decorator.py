@@ -4,6 +4,7 @@ from functools import wraps
 # Decorator to check if a user has the required role
 def role_required(required_role):
     # The actual decorator that wraps the view function
+    
     def decorator(view_func):
         @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
