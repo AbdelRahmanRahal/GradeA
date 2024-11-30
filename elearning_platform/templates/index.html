@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index Page</title>
-</head>
-<body>
-    <h1>Welcome to the Index Page!</h1>
-</body>
-</html>
+<h1>Featured Courses</h1>
+<ul>
+    {% for course in featured_courses %}
+        <li>
+            <h2>{{ course.title }}</h2>
+            <p>{{ course.description }}</p>
+            <img src="{{ course.image.url }}" alt="Course Image" />
+        </li>
+    {% endfor %}
+</ul>

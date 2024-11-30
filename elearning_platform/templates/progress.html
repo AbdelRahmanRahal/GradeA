@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Progress{% endblock %}
+
+{% block content %}
+<div class="progress-container">
+    <h1>Your Learning Progress</h1>
+    <canvas id="progressChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('progressChart').getContext('2d');
+    const progressChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Course 1', 'Course 2', 'Course 3'],
+            datasets: [{
+                label: 'Completion (%)',
+                data: [70, 40, 85],
+                backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+                borderColor: ['rgba(75, 192, 192, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+</script>
+{% endblock %}

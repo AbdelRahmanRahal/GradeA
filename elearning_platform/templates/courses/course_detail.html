@@ -1,0 +1,26 @@
+<!-- templates/courses/course_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.name }}</title>
+</head>
+<body>
+    <header>
+        <h1>{{ course.name }}</h1>
+        <a href="{% url 'course_list' %}">Back to Courses</a>
+    </header>
+    <main>
+        <h2>Description</h2>
+        <p>{{ course.description }}</p>
+
+        <h3>Assignments for this Course</h3>
+        <ul>
+            {% for assignment in assignments %}
+                <li>{{ assignment.name }} - Due Date: {{ assignment.due_date }}</li>
+            {% endfor %}
+        </ul>
+    </main>
+</body>
+</html>

@@ -23,11 +23,19 @@ handler404 = 'users.views.custom_404_view'
 handler500 = 'users.views.custom_500_view'
 
 
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-     path('register/', views.register, name='register'),
+    path('', views.index_view, name='index'),
+     path('admin/', admin.site.urls),
+    path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
-    path("instructor/dashboard/", views.instructor_dashboard, name="instructor_dashboard"),
-path('', views.index_view, name='index'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('courses/', views.course_list, name='course_list'),
+    path('courses/<int:course_id>/', views.course_detail, name='course_detail'),
+    path('assignments/', views.assignment_list, name='assignment_list'),
+    path('assignments/<int:assignment_id>/', views.assignment_detail, name='assignment_detail'),
+   
+    path('courses/<int:course_id>/enroll/', views.enroll_course, name='enroll_course'),
+    path('progress/', views.progress_tracking, name='progress_tracking'),
 ]

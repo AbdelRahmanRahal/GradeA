@@ -61,7 +61,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Path to the templates directory
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,6 +73,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 
 WSGI_APPLICATION = 'elearning_platform.wsgi.application'
@@ -128,6 +129,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+LOGIN_URL = '/login/'       # The URL for the login page
+LOGIN_REDIRECT_URL = '/dashboard/'  # Redirect after successful login
+LOGOUT_REDIRECT_URL = '/login/'  # Redirect after logout
+
 
 
 # Default primary key field type
