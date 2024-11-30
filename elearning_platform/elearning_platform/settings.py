@@ -54,10 +54,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'elearning_platform.urls'
 
+import os
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        
+        'DIRS': [BASE_DIR / 'templates'],  # Path to the templates directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +73,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'elearning_platform.wsgi.application'
 
