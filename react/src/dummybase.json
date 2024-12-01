@@ -20,6 +20,16 @@
       "last-name": "Akiyama",
       "email": "LifelineofKamurocho@gmail.com",
       "password": "1234512345"
+    },
+    {
+      "id": "e698",
+      "firstname": "mahmoud",
+      "lastname": "mohamed",
+      "email": "m.mohamed2213@nu.edu.eg",
+      "password": "MA_4112004",
+      "selectedItems": [
+        "CS"
+      ]
     }
   ],
   "instructors": [
