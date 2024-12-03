@@ -1,26 +1,18 @@
-import { useState } from 'react'
-import React from 'react';
-import {
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
-} from 'react-router-dom';
-import LoginPage from './pages/login';
-import RegisterPage from './pages/register';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import SignUp from './pages/register';
+import Login from './pages/login';
+import CompleteProfile from './pages/complete-profile';
 
-const App = () => {
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/register" element={<SignUp />} />
+        <Route path="/complete-profile" element={<CompleteProfile />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
+  );
+}
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route>
-      <Route path='/login' element={<LoginPage />} />
-      <Route path='/register' element={<RegisterPage />} />
-    </Route>
-  )
-);
-
-return <RouterProvider router={router} />;
-};
 export default App;
-
