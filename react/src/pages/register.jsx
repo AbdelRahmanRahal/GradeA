@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState(""); // First Name State
+  const [lastName, setLastName] = useState(""); // Last Name State
   const [role, setRole] = useState("student"); // Default to "student"
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
@@ -16,9 +18,12 @@ const Register = () => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-	  role,
       options: {
-        data: { role }, // Store the selected role in user metadata
+        data: {
+          role, // Store the selected role
+          first_name: firstName, // Store First Name in metadata
+          last_name: lastName,  // Store Last Name in metadata
+        },
       },
     });
 
@@ -45,6 +50,36 @@ const Register = () => {
           <p className="text-red-500 text-center mb-4">{errorMessage}</p>
         )}
 
+        {/* First Name Field */}
+        <div className="mb-4">
+          <label htmlFor="firstName" className="block text-gray-700 font-bold mb-2">
+            First Name
+          </label>
+          <input
+            type="text"
+            id="firstName"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+        </div>
+
+        {/* Last Name Field */}
+        <div className="mb-4">
+          <label htmlFor="lastName" className="block text-gray-700 font-bold mb-2">
+            Last Name
+          </label>
+          <input
+            type="text"
+            id="lastName"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+        </div>
+
         <div className="mb-4">
           <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
             Email
@@ -60,10 +95,7 @@ const Register = () => {
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-gray-700 font-bold mb-2"
-          >
+          <label htmlFor="password" className="block text-gray-700 font-bold mb-2">
             Password
           </label>
           <input
