@@ -9,38 +9,48 @@ const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setErrorMessage("");
-
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setErrorMessage(error.message);
-      return;
-    }
-
-    if (data?.user) {
-      const { data: userProfile, error: profileError } = await supabase
-        .from("profiles")
-        .select("is_approved")
-        .eq("id", data.user.id)
-        .single();
-
-      if (profileError || !userProfile.is_approved) {
-        alert(
-          "Your account is pending admin approval. Please wait for approval."
-        );
-        await supabase.auth.signOut();
-        return;
-      }
-
-      alert("Login successful!");
-      navigate("/dashboard"); // Redirect to the dashboard or home page
-    }
+	e.preventDefault();
+	setErrorMessage("");
+  
+	const { data, error } = await supabase.auth.signInWithPassword({
+	  email,
+	  password,
+	});
+  
+	if (error) {
+	  setErrorMessage(error.message);
+	  return;
+	}
+  
+	if (data?.session) {
+	  const token = data.session.access_token;
+  
+	  // Send token to Django to check approval and update records
+	  const response = await fetch("http://localhost:8000/api/process-user/", {
+		method: "POST",
+		headers: {
+		  Authorization: `Bearer ${token}`,
+		  "Content-Type": "application/json",
+		},
+	  });
+  
+	  if (response.ok) {
+		const { is_approved } = await response.json();
+  
+		if (is_approved) {
+		  alert("Login successful!");
+		  navigate("/dashboard"); // Redirect to dashboard
+		} else {
+		  alert("Your account is pending admin approval. Please wait.");
+		  await supabase.auth.signOut();
+		}
+	  } else {
+		console.error("Error processing user:", await response.json());
+		alert("There was an issue processing your login. Please try again.");
+	  }
+	}
   };
+  
 
   const handleForgotPassword = async () => {
     if (!email) {
