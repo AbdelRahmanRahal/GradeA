@@ -70,6 +70,56 @@
       "id": "3",
       "name": "Jujutsu Arts",
       "abbreviation": "JJK"
+    },
+    {
+      "id": "4",
+      "name": "Mathematics",
+      "abbreviation": "MATH"
+    },
+    {
+      "id": "5",
+      "name": "Physics",
+      "abbreviation": "PHY"
+    },
+    {
+      "id": "6",
+      "name": "Chemistry",
+      "abbreviation": "CHEM"
+    },
+    {
+      "id": "7",
+      "name": "Philosophy",
+      "abbreviation": "PHIL"
+    },
+    {
+      "id": "8",
+      "name": "Psychology",
+      "abbreviation": "PSY"
+    },
+    {
+      "id": "9",
+      "name": "Engineering",
+      "abbreviation": "ENG"
+    },
+    {
+      "id": "10",
+      "name": "Art History",
+      "abbreviation": "AH"
+    },
+    {
+      "id": "11",
+      "name": "Political Science",
+      "abbreviation": "POL"
+    },
+    {
+      "id": "12",
+      "name": "Economics",
+      "abbreviation": "ECO"
+    },
+    {
+      "id": "13",
+      "name": "Sociology",
+      "abbreviation": "SOC"
     }
   ]
 }
