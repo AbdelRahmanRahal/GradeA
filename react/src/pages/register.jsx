@@ -27,10 +27,13 @@ const Register = () => {
     e.preventDefault();
     setErrorMessage("");
 
+	const currentYear = new Date().getFullYear().toString().slice(-2); // Get the last two digits of the current year
+
     const metadata = {
       role,
       first_name: firstName,
       last_name: lastName,
+	  year: currentYear,
     };
 
     if (role === "student") {
