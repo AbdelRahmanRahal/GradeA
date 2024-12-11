@@ -39,10 +39,13 @@ const Register = () => {
     e.preventDefault();
     setErrorMessage("");
 
+    const currentYear = new Date().getFullYear().toString().slice(-2);
+
     const metadata = {
       role,
       first_name: firstName,
       last_name: lastName,
+      year: currentYear,
     };
 
     if (role === "student") {
@@ -99,6 +102,16 @@ const Register = () => {
       if (!password) {
         errors.password = 'Password is required.';
       }
+
+      if (password.length < 6 && (password === confirmPassword)) {
+        errors.password = 'Password must at least be 6 characters.';
+        errors.confirmPassword = 'Password must at least be 6 characters.';
+      }
+
+      if (password.length < 6) {
+        errors.password = 'Password must at least be 6 characters.';
+      }
+
       if (!confirmPassword) {
         errors.confirmPassword = 'Please confirm your password.';
       }
