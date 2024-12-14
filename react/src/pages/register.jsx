@@ -55,7 +55,7 @@ const Register = () => {
 
     if (data) {
       alert("Sign-up successful! Please verify your email.");
-      navigate("/verify-email");
+      navigate("/login");
     }
   };
 
