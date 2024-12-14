@@ -22,24 +22,9 @@ const Login = () => {
       return;
     }
 
-    if (data?.user) {
-      const { data: userProfile, error: profileError } = await supabase
-        .from("profiles")
-        .select("is_approved")
-        .eq("id", data.user.id)
-        .single();
+	alert("Login successful!");
+    navigate("/dashboard");
 
-      if (profileError || !userProfile.is_approved) {
-        alert(
-          "Your account is pending admin approval. Please wait for approval."
-        );
-        await supabase.auth.signOut();
-        return;
-      }
-
-      alert("Login successful!");
-      navigate("/dashboard"); // Redirect to the dashboard or home page
-    }
   };
 
   const handleForgotPassword = async () => {
