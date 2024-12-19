@@ -20,6 +20,16 @@
       "last-name": "Akiyama",
       "email": "LifelineofKamurocho@gmail.com",
       "password": "1234512345"
+    },
+    {
+      "id": "e698",
+      "firstname": "mahmoud",
+      "lastname": "mohamed",
+      "email": "m.mohamed2213@nu.edu.eg",
+      "password": "MA_4112004",
+      "selectedItems": [
+        "CS"
+      ]
     }
   ],
   "instructors": [
@@ -60,6 +70,83 @@
       "id": "3",
       "name": "Jujutsu Arts",
       "abbreviation": "JJK"
+    },
+    {
+      "id": "4",
+      "name": "Mathematics",
+      "abbreviation": "MATH"
+    },
+    {
+      "id": "5",
+      "name": "Physics",
+      "abbreviation": "PHY"
+    },
+    {
+      "id": "6",
+      "name": "Chemistry",
+      "abbreviation": "CHEM"
+    },
+    {
+      "id": "7",
+      "name": "Philosophy",
+      "abbreviation": "PHIL"
+    },
+    {
+      "id": "8",
+      "name": "Psychology",
+      "abbreviation": "PSY"
+    },
+    {
+      "id": "9",
+      "name": "Engineering",
+      "abbreviation": "ENG"
+    },
+    {
+      "id": "10",
+      "name": "Art History",
+      "abbreviation": "AH"
+    },
+    {
+      "id": "11",
+      "name": "Political Science",
+      "abbreviation": "POL"
+    },
+    {
+      "id": "12",
+      "name": "Economics",
+      "abbreviation": "ECO"
+    },
+    {
+      "id": "13",
+      "name": "Sociology",
+      "abbreviation": "SOC"
+    }
+  ],
+  "courses": [
+    {
+      "id": "101",
+      "name": "Introduction to Random Stuff",
+      "description": "An overview of random and unrelated topics to stimulate curiosity and creative thinking."
+    },
+    {
+      "id": "102",
+      "name": "Introduction to Mogging",
+      "description": "An overview of how to mog your opps."
+    },
+    {
+      "id": "103",
+      "name": "The Art of Rizz",
+      "description": "A deep dive into the philosophy and techniques of rizzing your professors and TAs. Courtesy of Robin"
+    },
+    {
+      "id": "104",
+      "name": "Advanced Spyology",
+      "description": "An advanced study of spying and stalking."
+    },
+    {
+      "id": "105",
+      "name": "Philosophy of Not Going To Uni",
+      "description": "Exploring the deeper meaning of not going to uni. yeah. just that xd"
     }
   ]
 }
