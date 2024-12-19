@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { supabase } from "../../supabase.js";
 import { useNavigate } from "react-router-dom";
-import {FaExclamationCircle} from "react-icons/fa";
+import { createCache } from "../../utils/CacheWorkings.jsx"
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
 import CredentialsForm from "./components/CredentialsForm.jsx";
 import ForgotPasswordForm from "./components/ForgotPassword.jsx";
 import { validateEmail } from '../../utils/FormValidateInfo.jsx';
+import { useLoading } from '../../context/LoadingContext';
+import Loading from "../../components/Loading.jsx";
 
 const Login = () => {
   const [formErrors, setFormErrors] = useState({});
@@ -18,7 +20,42 @@ const Login = () => {
   const [componentIndex, setComponentIndex] = useState(0);
   const navigate = useNavigate();
 
+  const { setLoading } = useLoading();
+  const [user, setUser] = React.useState(null);
+
+  useEffect(() => {
+    const setLoadingWithDelay = async () => {
+      setLoading(true); // Set loading to true immediately
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate a wait
+      console.log("Kill yourself NOW"); // Fake wait loool
+      setLoading(false); // Set loading to false only after the delay
+    };
+
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    checkUser();
+    setLoadingWithDelay();
+  }, []);
+
+  // If user is logged in, navigate them to the dashboard
+  if (user) {
+    // const logInUser = async () => {
+    //   await createCache;
+    // setLoading(false);
+      navigate("/dashboard");
+    // }
+  }
+
+  if (!user) {
+
+    // setLoading(false);
+  }
+
   const handleLogin = async (e) => {
+
     e.preventDefault();
     setErrorMessage("");
 
@@ -41,25 +78,13 @@ const Login = () => {
     }
 
     if (data?.user) {
-      const { data: userProfile, error: profileError } = await supabase
-          .from("profiles")
-          .select("is_approved")
-          .eq("id", data.user.id)
-          .single();
-
-      if (profileError || !userProfile.is_approved) {
-        toast.info("Your account is pending admin approval. Please wait for approval.");
-        await supabase.auth.signOut();
-        return;
-      }
-
-      if (!userProfile) {
-        console.log("Non-existent account!");
-        return;
-      }
-
-      alert("Login successful!");
-      navigate("/dashboard"); // Redirect to the dashboard or home page
+      // console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+      // await (async () => {
+      //   await createCache();
+      //   await new Promise((resolve) => setTimeout(resolve, 1000)); // Fake wait loool
+      // })();
+      setLoading(false);
+      navigate("/dashboard");// Redirect to the dashboard or home page
     }
   };
 
@@ -127,6 +152,8 @@ const Login = () => {
                 <button
                     type="button"
                     onClick={async (e) => {
+                      setLoading(true);
+                      console.log("Loading set to true");
                       if (validateEmail(email)) {
                           await handleLogin(e); // Wait for the Promise to resolve
                       } else {
