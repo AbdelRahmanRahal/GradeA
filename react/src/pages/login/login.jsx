@@ -24,20 +24,26 @@ const Login = () => {
   const [user, setUser] = React.useState(null);
 
   useEffect(() => {
-    const setLoadingWithDelay = async () => {
+    const setLoadingA = async () => {
       setLoading(true); // Set loading to true immediately
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate a wait
-      console.log("Kill yourself NOW"); // Fake wait loool
-      setLoading(false); // Set loading to false only after the delay
+      // await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate a wait
+      // Set loading to false only after the delay
     };
+
+    const removeLoadingA = async () => {
+      setLoading(false);
+    }
 
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
     };
 
+    // setLoadingA();
+    setLoading(true);
     checkUser();
-    setLoadingWithDelay();
+    setLoading(false);
+    // removeLoadingA();
   }, []);
 
   // If user is logged in, navigate them to the dashboard
@@ -45,6 +51,7 @@ const Login = () => {
     // const logInUser = async () => {
     //   await createCache;
     // setLoading(false);
+    setLoading(false);
       navigate("/dashboard");
     // }
   }
@@ -55,6 +62,8 @@ const Login = () => {
   }
 
   const handleLogin = async (e) => {
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     e.preventDefault();
     setErrorMessage("");

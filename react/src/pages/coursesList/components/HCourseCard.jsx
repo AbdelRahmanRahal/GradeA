@@ -1,12 +1,6 @@
-import { Link } from 'react-router-dom';
-import {useEffect, useState} from "react";
 import { AccessButton, RemoveButton, EditButton } from "./ButtonA.jsx";
 const HCourseCard = ({title, description, image, role}) => {
-    // const [showFullDescription, setShowFullDescription] = useState(false);
-    //
-    // if (!showFullDescription) {
-    //     description = description.substring(0, 40) + '...';
-    // }
+
     return (
         <section className='py-4 min-w-full'>
             <div className='flex container-xl lg:container m-auto min-w-full gap-6 rounded-lg shadow-md transition-all hover:bg-gray-100 overflow-hidden'>

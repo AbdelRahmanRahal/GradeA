@@ -9,7 +9,6 @@ import { AddButton } from "./components/ButtonA.jsx";
 const coursesList = () => {
     const [role, setRole] = useState(null); // 'student' or 'professor'
     const [courses, setCourses] = useState([]);
-    // const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const [data, setData] = useState([]); //temp
@@ -17,7 +16,7 @@ const coursesList = () => {
     const { setLoading } = useLoading();
 
 
-    useEffect(() => {
+    useEffect(() => { // REMEMBER: CHANGE DATA TO COURSES IN THE RETURN IF YOU SWITCH OFF TEMP !!!!!
         const getRole = async () => {
             const role = await fetchRole();
             setRole(role);};
@@ -133,49 +132,22 @@ const coursesList = () => {
         // fetchUserRoleAndCourses();
     }, []);
 
-    // if (loading) return <Loading/>;
-
     return (
         <div className="min-h-screen bg-gray-100">
-            {/*<header className="bg-red-600 p-2 shadow-md">*/}
-            {/*    /!*<h1 className="text-xl font-bold">Dashboard</h1>*!/*/}
-            {/*</header>*/}
             <main className="p-6">
-                {/*<h2 className="text-2xl mb-4">*/}
-                {/*    Welcome, {role === "student" ? "Student" : "Professor"}!*/}
-                {/*</h2>*/}
                 <div className="bg-white shadow-md rounded p-4">
                     <h3 className="flex text-xl font-bold mb-4">Your Courses {role === "instructor" && <AddButton />}</h3>
-                    {/*{courses.length > 0 ? (*/}
-                    {/*    <ul className="list-disc pl-5">*/}
-                    {/*        {courses.map((course) => (*/}
-                    {/*            <li key={course.id}>*/}
-                    {/*                <strong>{course.name}</strong> - {course.description}*/}
-                    {/*                {role === "professor" && (*/}
-                    {/*                    <button*/}
-                    {/*                        className="ml-4 text-blue-500 hover:underline"*/}
-                    {/*                        onClick={() => alert(`Manage course: ${course.name}`)}*/}
-                    {/*                    >*/}
-                    {/*                        Manage Students*/}
-                    {/*                    </button>*/}
-                    {/*                )}*/}
-                    {/*            </li>*/}
-                    {/*        ))}*/}
-                    {/*    </ul>*/}
-                    {/*) : (*/}
-                    {/*    <p>No courses found.</p>*/}
-                    {/*)}*/}
                     <div className={`flex gap-6 max-h-full min-w-full`}>
-                    <div className="flex-col gap-6 max-h-full min-w-full"> {/*rid grid-cols-1 sm:grid-cols-2 md:grid-cols-3*/}
-                        {data.map((item) => (
+                    <div className="flex-col gap-6 max-h-full min-w-full">
+                        {data.length > 0 ? data.map((item) => (
                             <HCourseCard
                                 key={item.id}
                                 title={item.name}
                                 description={item.description}
-                                image="https://via.placeholder.com/300"
-                                role={role}// Placeholder image
+                                image="https://via.placeholder.com/300" // Placeholder image lmao
+                                role={role}
                             />
-                        ))}
+                        )) : <p>No courses found.</p>}
                     </div>
                     </div>
                 </div>

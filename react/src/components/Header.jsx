@@ -7,45 +7,23 @@ import { fetchFirstName } from "../utils/CacheWorkings.jsx";
 
 const Header = () => {
     const navigate = useNavigate();
-    // const [name, setName] = useState("");
     const [firstName, setFirstName] = useState("");
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false); // artifacts of a dream
     const [signedIn, setSignedIn] = useState(false);
     let standardColor = "hover:text-red-600 focus:text-red-600"
 
     const location = useLocation();
 
-    // Check if the current path is "/dashboard"
+    // Check if the current path is whatever the current path is.
     const isDashboard = location.pathname === '/dashboard';
     const isCourses = location.pathname === '/courses';
 
     useEffect(() => {
-        // console.log(fetchFirstName);
-        // setName(fetchFirstName);
         const getFirstName = async () => {
         const name = await fetchFirstName();
         setFirstName(name);};
         getFirstName(); }, []);
-        // console.log(supabase.auth.getUser())
-        // const fetchUserName = async () => {
-        //
-        //     const {data: {user}} = await supabase.auth.getUser();
-        //     if (user) {
-        //         console.log("User is:" + user); setSignedIn(true);}
-        //     // Fetch the user's role from the profiles table
-        //     const {data: profile, error: profileError} = await supabase
-        //         .from("profiles")
-        //         .select("first_name")
-        //         .eq("id", user.id)
-        //         .single();
-        //     setName(profile.first_name);
-        //     console.log("Userinfo:" + JSON.stringify(profile));
-        //     console.log(name);
-        //     console.log("OI OI OI" + supabase.auth.getUser());
-        // }
-        // fetchUserName();
 
-    // if (!signedIn) return null;
 
     return (<header className={`pb-6 bg-white lg:pb-0`}>
             <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -160,7 +138,6 @@ const Header = () => {
                 {/*</nav>*/}
             </div>
             <footer className="bg-red-600 p-2 shadow-md">
-                {/*<h1 className="text-xl font-bold">Dashboard</h1>*/}
             </footer>
         </header>
     );

@@ -6,10 +6,13 @@ import { useNavigate } from "react-router-dom";
 import 'react-icons/fa'
 import {FaChalkboardTeacher, FaGraduationCap, FaExclamationCircle} from "react-icons/fa";
 import ItemSelectionForm from "./components/ItemSelectionForm.jsx";
+import VerifyEmail from "./components/VerifyEmail.jsx";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import {useLoading} from "../../context/LoadingContext.jsx";
 
 const Register = () => {
+  const { setLoading } = useLoading();
   const [step, setStep] = useState(0);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -37,6 +40,7 @@ const Register = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setErrorMessage("");
 
     const currentYear = new Date().getFullYear().toString().slice(-2);
@@ -61,13 +65,14 @@ const Register = () => {
     });
 
     if (error) {
+      setLoading(false);
       toast.error(error.message);
       return;
     }
 
     if (data) {
-      toast.success("Sign-up successful! Please verify your email.");
-      navigate("/verify-email");
+      setLoading(false);
+      setStep(3)
     }
   };
 
@@ -319,8 +324,10 @@ const Register = () => {
           setSelectedItems={setSelectedItems}
           selectedItems={selectedItems}
       />),
+      height: "80vh"
 
     },
+    {title: ``, content: (<VerifyEmail name={firstName}/>), height: "40vh"},
   ];
 
 
@@ -342,7 +349,7 @@ const Register = () => {
                 </div>
             ))}
           </div>
-          {step > 0 && step < steps.length - 1 && (
+          {step === 1 && ( //step > 0 && step < steps.length - 1
               <div className="flex gap-5">
                 <button
                     type="button"
@@ -363,7 +370,7 @@ const Register = () => {
 
               </div>
           )}
-          {step === steps.length - 1 && (
+          {step === 2 && ( //steps.length - 1
               <div className="flex gap-5">
                 <button
                     type="button"
