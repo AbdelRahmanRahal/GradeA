@@ -78,13 +78,7 @@ const Register = () => {
     }
   ];
     setItems(data);
-    // // Fetch departments data from API
-    // fetch('/api/fields')
-    //     .then((response) => response.json())
-    //     .then((data) => setItems(data))
-    //     .catch((error) => console.error('Error fetching fields:', error));
   }, []);
-  // end of dummy-base api integration
 
   const handleSignUp = async (e) => {
     e.preventDefault();
