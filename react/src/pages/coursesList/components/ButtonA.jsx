@@ -22,7 +22,9 @@ const AccessButton = ({ courseID }) => (
     <BaseButton
         text={<FaArrowRight/>}
         className="bg-black text-white hover:bg-red-800 min-h-full gradient-box"
+        onClick={event => {navigate(`/course/${courseID}`)}}
         courseID={courseID}
+    goesTo=""
     />
 );
 

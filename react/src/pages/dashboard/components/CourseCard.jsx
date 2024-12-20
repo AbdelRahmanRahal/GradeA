@@ -1,7 +1,11 @@
-const CourseCard = ({title, image}) => {
+import { useNavigate } from "react-router-dom";
+
+const CourseCard = ({title, image, courseID}) => {
+    const navigate = useNavigate();
 
     return (
-        <button className='py-4 w-80'>
+        <button className='py-4 w-80'
+        onClick={event => {navigate(`/course/${courseID}`)}}>
             <div className='container-xl lg:container m-auto rounded-lg transition-all duration-200 hover:bg-gray-300'>
                 {image && (
                     <img

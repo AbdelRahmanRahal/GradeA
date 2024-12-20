@@ -1,5 +1,5 @@
 import { AccessButton, RemoveButton, EditButton } from "./ButtonA.jsx";
-const HCourseCard = ({title, description, image, role}) => {
+const HCourseCard = ({title, description, image, role, courseID}) => {
 
     return (
         <section className='py-4 min-w-full'>
@@ -26,7 +26,8 @@ const HCourseCard = ({title, description, image, role}) => {
                     }
                 </div>
                 <div className="ml-auto ">
-                    <AccessButton/>
+                    <AccessButton
+                    courseID={courseID}/>
                 </div>
             </div>
         </section>

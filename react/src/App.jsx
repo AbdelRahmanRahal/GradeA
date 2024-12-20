@@ -10,6 +10,7 @@ import RegisterPage from './pages/register/register.jsx';
 import DashboardPage from './pages/dashboard/dashboard.jsx';
 import CoursesPage from './pages/coursesList/coursesList.jsx';
 import Loading from './components/Loading';
+import CoursePage from "./pages/coursePage/coursePage.jsx";
 
 function AppContent() {
     const { loading } = useLoading(); // Access loading state
@@ -44,6 +45,16 @@ function AppContent() {
                             <>
                                 <Header/>
                                 <CoursesPage/>
+                                <Footer/>
+                            </>
+                        }
+                    />
+                    <Route
+                        path="/course/:id"
+                        element={
+                            <>
+                                <Header/>
+                                <CoursePage/>
                                 <Footer/>
                             </>
                         }

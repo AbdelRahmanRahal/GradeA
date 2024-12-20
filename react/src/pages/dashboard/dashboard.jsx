@@ -134,6 +134,7 @@ const Dashboard = () => {
                         {data.slice(0,3).map((item) => (
                             <CourseCard
                                 key={item.id}
+                                courseID={item.id}
                                 title={item.name}
                                 description={item.description}
                                 image="https://via.placeholder.com/300" // Placeholder image lmao

@@ -146,6 +146,7 @@ const coursesList = () => {
                                 description={item.description}
                                 image="https://via.placeholder.com/300" // Placeholder image lmao
                                 role={role}
+                                courseID={item.id}
                             />
                         )) : <p>No courses found.</p>}
                     </div>

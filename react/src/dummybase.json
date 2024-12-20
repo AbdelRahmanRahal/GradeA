@@ -1,60 +1,4 @@
 {
-  "students": [
-    {
-      "id": "1",
-      "first-name": "Kazuma",
-      "last-name": "Kiryu",
-      "email": "DragonofDojima@gmail.com",
-      "password": "123123"
-    },
-    {
-      "id": "2",
-      "first-name": "Majima",
-      "last-name": "Goro",
-      "email": "MadDogofShimano@gmail.com",
-      "password": "12341234"
-    },
-    {
-      "id": "3",
-      "first-name": "Shun",
-      "last-name": "Akiyama",
-      "email": "LifelineofKamurocho@gmail.com",
-      "password": "1234512345"
-    },
-    {
-      "id": "e698",
-      "firstname": "mahmoud",
-      "lastname": "mohamed",
-      "email": "m.mohamed2213@nu.edu.eg",
-      "password": "MA_4112004",
-      "selectedItems": [
-        "CS"
-      ]
-    }
-  ],
-  "instructors": [
-    {
-      "id": "1",
-      "first-name": "Yakuza",
-      "last-name": "Man",
-      "email": "LMAO@gmail.com",
-      "password": "123123"
-    },
-    {
-      "id": "2",
-      "first-name": "Civilization",
-      "last-name": "Goro",
-      "email": "ROFL@gmail.com",
-      "password": "12341234"
-    },
-    {
-      "id": "3",
-      "first-name": "jojo",
-      "last-name": "JOJOa",
-      "email": "JOJO@gmail.com",
-      "password": "1234512345"
-    }
-  ],
   "fields": [
     {
       "id": "1",
@@ -147,6 +91,124 @@
       "id": "105",
       "name": "Philosophy of Not Going To Uni",
       "description": "Exploring the deeper meaning of not going to uni. yeah. just that xd"
+    }
+  ],
+  "course": [
+    {
+      "id": "101",
+      "name": "Introduction to Random Stuff",
+      "sections": [
+        {
+          "id": "1",
+          "title": "Getting Started with Randomness",
+          "entries": [
+            {
+              "type": "link",
+              "title": "Video: Embracing Randomness",
+              "url": "https://www.youtube.com/watch?v=abc123",
+              "description": "A video discussing the beauty and application of randomness in everyday life."
+            },
+            {
+              "type": "text",
+              "title": "Important Alert",
+              "content": "Please complete the introductory survey on random topics by Friday."
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "title": "Exploring Chaos",
+          "entries": [
+            {
+              "type": "link",
+              "title": "Video: The Chaos Theory Explained",
+              "url": "https://www.youtube.com/watch?v=xyz456",
+              "description": "An engaging explanation of chaos theory and its applications."
+            },
+            {
+              "type": "assignment",
+              "title": "Assignment: Chaos in Everyday Life",
+              "description": "Write a short essay on how randomness influences your daily decisions.",
+              "dueDate": "2024-12-30"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "title": "Applications of Randomness",
+          "entries": [
+            {
+              "type": "link",
+              "title": "Material: Random Number Generators",
+              "url": "https://random.org",
+              "description": "Learn how random number generators are used in computer science and beyond."
+            },
+            {
+              "type": "text",
+              "title": "Reminder",
+              "content": "Next lecture will feature a guest speaker discussing randomness in art."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "102",
+      "name": "Introduction to Mogging",
+      "sections": [
+        {
+          "id": "1",
+          "title": "Understanding the Art of Mogging",
+          "entries": [
+            {
+              "type": "link",
+              "title": "Video: Mogging 101",
+              "url": "https://www.youtube.com/watch?v=mog123",
+              "description": "A beginner's guide to mogging your opponents effectively."
+            },
+            {
+              "type": "text",
+              "title": "Important Alert",
+              "content": "Please bring your favorite mogging example to the next class."
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "title": "Techniques for Effective Mogging",
+          "entries": [
+            {
+              "type": "link",
+              "title": "Video: Advanced Mogging Techniques",
+              "url": "https://www.youtube.com/watch?v=mog456",
+              "description": "Exploring advanced techniques for mogging in competitive scenarios."
+            },
+            {
+              "type": "assignment",
+              "title": "Assignment: Analyze a Mogging Example",
+              "description": "Find a real-world example of mogging and analyze its effectiveness.",
+              "dueDate": "2024-12-28"
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "title": "Ethics and Mogging",
+          "entries": [
+            {
+              "type": "link",
+              "title": "Material: Mogging in Modern Society",
+              "url": "https://example.com/mogging-ethics",
+              "description": "An article discussing the ethical implications of mogging."
+            },
+            {
+              "type": "text",
+              "title": "Reminder",
+              "content": "Prepare for the class debate on the ethics of mogging next week."
+            }
+          ]
+        }
+      ]
     }
   ]
 }
