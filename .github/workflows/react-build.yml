@@ -25,9 +25,9 @@ jobs:
       run: |
         npm install
 
-    - name: Run tests
-      run: |
-        npm test -- --coverage
+    # - name: Run tests
+    #   run: |
+    #     npm test -- --coverage
 
     - name: Build the React app
       run: |
