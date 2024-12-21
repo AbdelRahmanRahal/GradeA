@@ -83,6 +83,7 @@ const Login = () => {
       }
       else {
       toast.error(error.message); }
+      setLoading(false);
       return;
     }
 
