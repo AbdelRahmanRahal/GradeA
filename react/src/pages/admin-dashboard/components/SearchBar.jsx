@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 
-const SearchBar = ({ search, setSearch }) => {
+const SearchBar = ({ setSearch }) => {
+  const [tempSearch, setTempSearch] = useState("");
+
+  const handleSearch = () => {
+    setSearch(tempSearch); // Trigger search only on button click
+  };
+
   return (
-    <input
-      type="text"
-      placeholder="Search..."
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-      className="border p-2 mb-4 w-full"
-    />
+    <div className="flex mb-4">
+      <input
+        type="text"
+        placeholder="Search..."
+        value={tempSearch}
+        onChange={(e) => setTempSearch(e.target.value)}
+        className="border p-2 flex-grow"
+      />
+      <button onClick={handleSearch} className="bg-blue-500 text-white px-4 py-2 ml-2">
+        Search
+      </button>
+    </div>
   );
 };
 

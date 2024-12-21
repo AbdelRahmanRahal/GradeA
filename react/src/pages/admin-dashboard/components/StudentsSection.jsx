@@ -14,8 +14,6 @@ const StudentsSection = () => {
         .select("*")
         .ilike("first_name", `%${search}%`); // Case-insensitive search
       if (!error) setStudents(data);
-
-      console.log(data);
     };
 
     fetchStudents();

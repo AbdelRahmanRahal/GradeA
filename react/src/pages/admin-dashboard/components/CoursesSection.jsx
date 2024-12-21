@@ -12,7 +12,7 @@ const CoursesSection = () => {
       const { data, error } = await supabase
         .from("courses")
         .select("*")
-        .ilike("course_name", `%${search}%`); // Case-insensitive search
+        .ilike("name", `%${search}%`); // Case-insensitive search
       if (!error) setCourses(data);
     };
 
@@ -20,7 +20,7 @@ const CoursesSection = () => {
   }, [search]);
 
   const deleteCourse = async (courseId) => {
-    await supabase.from("courses").delete().eq("course_id", courseId);
+    await supabase.from("courses").delete().eq("id", courseId);
     setSearch(search);
   };
 
@@ -30,15 +30,15 @@ const CoursesSection = () => {
       <SearchBar search={search} setSearch={setSearch} />
       <DataTable
         data={courses}
-        columns={["Course Name", "Course Code", "Professor ID", "Actions"]}
+        columns={["Course Name", "Course ID", "Professors", "Actions"]}
         renderRow={(course) => (
-          <tr key={course.course_id}>
-            <td>{course.course_name}</td>
-            <td>{course.course_code}</td>
-            <td>{course.professor_id}</td>
+          <tr key={course.id}>
+            <td>{course.name}</td>
+            <td>{course.id}</td>
+            <td>{course.professors}</td>
             <td>
               <button
-                onClick={() => deleteCourse(course.course_id)}
+                onClick={() => deleteCourse(course.id)}
                 className="bg-red-500 text-white px-2 py-1"
               >
                 Delete
