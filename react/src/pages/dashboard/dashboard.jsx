@@ -29,89 +29,31 @@ const Dashboard = () => {
         if (profileError) throw profileError;
         
         setRole(profile.role);
-        
-        let courses = [];
 
         if (profile.role === "admin") navigate("/admin");
         
-        if (profile.role === "student") {
-          // Fetch the student's auto-generated student_id
-          const { data: studentProfile, error: studentError } = await supabase
-            .from("students")
-            .select("student_id")
-            .eq("id", user.id)
-            .single();
+        // Fetch full course details
+        const { data: coursesDetails, error: coursesDetailsError } = await supabase
+          .from("courses_with_covers")
+          .select("*")
         
-          if (studentError) throw studentError;
-          
-          // Fetch the course IDs for the student
-          const { data: studentCourses, error: studentCoursesError } = await supabase
-            .from("students_courses")
-            .select("course_id")
-            .eq("student_id", studentProfile.student_id);
-          
-          if (studentCoursesError) throw studentCoursesError;
-          
-          const courseIds = studentCourses.map((course) => course.course_id);
-          
-          if (courseIds.length > 0) {
-            // Fetch full course details
-            const { data: studentCourseDetails, error: studentCourseDetailsError } = await supabase
-              .from("courses")
-              .select("*")
-              .in("id", courseIds);
-            
-            if (studentCourseDetailsError) throw studentCourseDetailsError;
-
-            courses = studentCourseDetails;
-          }
-        } else if (profile.role === "professor") {
-          // Fetch the professor's auto-generated professor_id
-          const { data: professorProfile, error: professorError } = await supabase
-            .from("professors")
-            .select("professor_id")
-            .eq("id", user.id)
-            .single();
-          
-          if (professorError) throw professorError;
-          
-          // Fetch the course IDs for the professor
-          const { data: professorCourses, error: professorCoursesError } = await supabase
-            .from("professors_courses")
-            .select("course_id")
-            .eq("professor_id", professorProfile.professor_id);
-          
-          if (professorCoursesError) throw professorCoursesError;
-          
-          const courseIds = professorCourses.map((course) => course.course_id);
-          
-          if (courseIds.length > 0) {
-            // Fetch full course details
-            const { data: professorCourseDetails, error: professorCourseDetailsError } = await supabase
-              .from("courses")
-              .select("*")
-              .in("id", courseIds);
-          
-            if (professorCourseDetailsError) throw professorCourseDetailsError;
-          
-            courses = professorCourseDetails;
-          }
-        }
+        if (coursesDetailsError) throw coursesDetailsError;
           
         // Fetch public URLs for cover images
-        const coursesWithImages = await Promise.all(
-          courses.map(async (course) => {
-            if (course.cover_image) {
-              const { data: imageData } = supabase.storage
-                .from("covers")
-                .getPublicUrl(course.cover_image);
-              return { ...course, imageUrl: imageData.publicUrl };
-            }
-            return { ...course, imageUrl: "https://via.placeholder.com/300" }; // Fallback for courses without cover images
-          })
-        );
+        const coursesWithCovers = coursesDetails.map((course) => ({
+          id: course.course_id,
+          name: course.course_name,
+          description: course.description,
+          startDate: course.start_date,
+          endDate: course.end_date,
+          departments: course.departments,
+          coverImageUrl: course.cover_image_name ? supabase.storage
+            .from(course.cover_image_bucket)
+            .getPublicUrl(course.cover_image_name).data.publicUrl : "https://via.placeholder.com/300"
+        }));
+        console.log(coursesWithCovers);
 
-        setCourses(coursesWithImages);
+        setCourses(coursesWithCovers);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       } finally {
@@ -134,7 +76,7 @@ const Dashboard = () => {
                     key={item.id}
                     title={item.name}
                     description={item.description}
-                    image={item.imageUrl}
+                    image={item.coverImageUrl}
                   />
                 ))}
               </div>
