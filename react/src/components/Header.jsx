@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import logo from '../../../logo/logo.svg'
 import { supabase } from "../supabase.js";
 import { signOutUser } from "../utils/SignOutUser.jsx";
-import {useLocation, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import { fetchFirstName } from "../utils/CacheWorkings.jsx";
 
 const Header = () => {
@@ -30,8 +30,10 @@ const Header = () => {
                 <nav className="flex items-center justify-between h-16 lg:h-20">
                     <div className="flex-shrink-0">
                         <a href="#" title="" className="flex">
+                            <Link to="/dashboard">
                             <img className="w-auto h-8 lg:h-10"
                                  src={logo} alt=""/>
+                            </Link>
                         </a>
                     </div>
 
