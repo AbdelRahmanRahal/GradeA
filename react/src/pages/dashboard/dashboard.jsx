@@ -100,7 +100,6 @@ const Dashboard = () => {
         }
           
         setCourses(courses);
-        console.log(courses);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       } finally {
