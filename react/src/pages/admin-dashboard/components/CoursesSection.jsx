@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../../supabase";
+import { toast } from "react-toastify";
 import SearchBar from "./SearchBar";
 import DataTable from "./DataTable";
 
@@ -9,19 +10,40 @@ const CoursesSection = () => {
 
   useEffect(() => {
     const fetchCourses = async () => {
-      const { data, error } = await supabase
-        .from("courses")
-        .select("*")
-        .ilike("name", `%${search}%`); // Case-insensitive search
+      let query = supabase.from("courses").select("*");
+      
+      // Because the ID in the courses table specifically
+      // is an integer, we need to check if the search is numeric.
+      // Type casting within the query does not work in REST API.
+      if (search) {
+        // Check if search is numeric
+        if (!isNaN(search)) {
+          query = query.eq("id", Number(search)); // Exact match for id
+        } else {
+          query = query.ilike("name", `%${search}%`); // Partial match for name
+        }
+      }
+  
+      const { data, error } = await query;
       if (!error) setCourses(data);
     };
-
+  
     fetchCourses();
   }, [search]);
+  
 
   const deleteCourse = async (courseId) => {
-    await supabase.from("courses").delete().eq("id", courseId);
-    setSearch(search);
+    const confirmDelete = window.confirm("Are you sure you want to delete this course?");
+    if (!confirmDelete) return;
+
+    const { error } = await supabase.from("courses").delete().eq("id", courseId);
+    if (error) {
+      console.log(error);
+      toast.error("Failed to delete course.");
+    } else {
+      toast.success("Course deleted.");
+      setSearch(search);
+    }
   };
 
   return (
@@ -30,12 +52,12 @@ const CoursesSection = () => {
       <SearchBar search={search} setSearch={setSearch} />
       <DataTable
         data={courses}
-        columns={["Course Name", "Course ID", "Professors", "Actions"]}
+        columns={["ID", "Name", "Professors", "Actions"]}
         renderRow={(course) => (
           <tr key={course.id}>
-            <td>{course.name}</td>
             <td>{course.id}</td>
-            <td>{course.professors}</td>
+            <td>{course.name}</td>
+            <td>{course.professors.join(", ")}</td>
             <td>
               <button
                 onClick={() => deleteCourse(course.id)}

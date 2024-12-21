@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../../supabase";
+import { toast } from "react-toastify";
 import SearchBar from "./SearchBar";
 import DataTable from "./DataTable";
 
@@ -9,52 +10,69 @@ const StudentsSection = () => {
 
   useEffect(() => {
     const fetchStudents = async () => {
-      const { data, error } = await supabase
-        .from("students")
-        .select("*")
-        .ilike("first_name", `%${search}%`); // Case-insensitive search
+      const query = supabase.from("students").select("*");
+      if (search) {
+        query.or(
+          `first_name.ilike.%${search}%,last_name.ilike.%${search}%,student_id.ilike.%${search}%`
+        );
+      }
+      const { data, error } = await query;
       if (!error) setStudents(data);
     };
-
     fetchStudents();
   }, [search]);
 
-  const approveStudent = async (studentId) => {
-    await supabase
+  const toggleApproval = async (studentId, isApproved) => {
+    const { error } = await supabase
       .from("students")
-      .update({ is_approved: true })
+      .update({ is_approved: !isApproved })
       .eq("student_id", studentId);
-    // Refresh list
-    setSearch(search);
+
+    if (error) {
+      toast.error("Failed to update approval status.");
+    } else {
+      toast.success(isApproved ? "Student disapproved." : "Student approved.");
+      setSearch(search);
+    }
   };
 
   const deleteStudent = async (studentId) => {
-    await supabase.from("students").delete().eq("student_id", studentId);
-    // Refresh list
-    setSearch(search);
+    const confirmDelete = window.confirm("Are you sure you want to delete this student?");
+    if (!confirmDelete) return;
+
+    const { error } = await supabase.from("students").delete().eq("student_id", studentId);
+    if (error) {
+      console.log(error);
+      toast.error("Failed to delete student.");
+    } else {
+      toast.success("Student deleted.");
+      setSearch(search);
+    }
   };
 
   return (
     <section id="students">
       <h3 className="text-xl font-bold mb-4">Manage Students</h3>
-      <SearchBar search={search} setSearch={setSearch} />
+      <SearchBar setSearch={setSearch} />
       <DataTable
         data={students}
-        columns={["First Name", "Last Name", "Email", "Actions"]}
+        columns={["ID", "First Name", "Last Name", "Email", "Department", "Actions"]}
         renderRow={(student) => (
           <tr key={student.student_id}>
+            <td>{student.student_id}</td>
             <td>{student.first_name}</td>
             <td>{student.last_name}</td>
             <td>{student.email}</td>
+            <td>{student.department}</td>
             <td>
-              {!student.is_approved && (
-                <button
-                  onClick={() => approveStudent(student.student_id)}
-                  className="bg-green-500 text-white px-2 py-1 mr-2"
-                >
-                  Approve
-                </button>
-              )}
+              <button
+                onClick={() => toggleApproval(student.student_id, student.is_approved)}
+                className={`${
+                  student.is_approved ? "bg-yellow-500" : "bg-green-500"
+                } text-white px-2 py-1 mr-2`}
+              >
+                {student.is_approved ? "Disapprove" : "Approve"}
+              </button>
               <button
                 onClick={() => deleteStudent(student.student_id)}
                 className="bg-red-500 text-white px-2 py-1"
