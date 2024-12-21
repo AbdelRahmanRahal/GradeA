@@ -29,76 +29,31 @@ const Dashboard = () => {
         if (profileError) throw profileError;
         
         setRole(profile.role);
-        
-        let courses = [];
 
         if (profile.role === "admin") navigate("/admin");
         
-        if (profile.role === "student") {
-          // Fetch the student's auto-generated student_id
-          const { data: studentProfile, error: studentError } = await supabase
-            .from("students")
-            .select("student_id")
-            .eq("id", user.id)
-            .single();
+        // Fetch full course details
+        const { data: coursesDetails, error: coursesDetailsError } = await supabase
+          .from("courses_with_covers")
+          .select("*")
         
-          if (studentError) throw studentError;
+        if (coursesDetailsError) throw coursesDetailsError;
           
-          // Fetch the course IDs for the student
-          const { data: studentCourses, error: studentCoursesError } = await supabase
-            .from("students_courses")
-            .select("course_id")
-            .eq("student_id", studentProfile.student_id);
-          
-          if (studentCoursesError) throw studentCoursesError;
-          
-          const courseIds = studentCourses.map((course) => course.course_id);
-          
-          if (courseIds.length > 0) {
-            // Fetch full course details
-            const { data: studentCourseDetails, error: studentCourseDetailsError } = await supabase
-              .from("courses")
-              .select("*")
-              .in("id", courseIds);
-            
-            if (studentCourseDetailsError) throw studentCourseDetailsError;
+        // Fetch public URLs for cover images
+        const coursesWithCovers = coursesDetails.map((course) => ({
+          id: course.course_id,
+          name: course.course_name,
+          description: course.description,
+          startDate: course.start_date,
+          endDate: course.end_date,
+          departments: course.departments,
+          coverImageUrl: course.cover_image_name ? supabase.storage
+            .from(course.cover_image_bucket)
+            .getPublicUrl(course.cover_image_name).data.publicUrl : "https://via.placeholder.com/300"
+        }));
+        console.log(coursesWithCovers);
 
-            courses = studentCourseDetails;
-          }
-        } else if (profile.role === "professor") {
-          // Fetch the professor's auto-generated professor_id
-          const { data: professorProfile, error: professorError } = await supabase
-            .from("professors")
-            .select("professor_id")
-            .eq("id", user.id)
-            .single();
-          
-          if (professorError) throw professorError;
-          
-          // Fetch the course IDs for the professor
-          const { data: professorCourses, error: professorCoursesError } = await supabase
-            .from("professors_courses")
-            .select("course_id")
-            .eq("professor_id", professorProfile.professor_id);
-          
-          if (professorCoursesError) throw professorCoursesError;
-          
-          const courseIds = professorCourses.map((course) => course.course_id);
-          
-          if (courseIds.length > 0) {
-            // Fetch full course details
-            const { data: professorCourseDetails, error: professorCourseDetailsError } = await supabase
-              .from("courses")
-              .select("*")
-              .in("id", courseIds);
-          
-            if (professorCourseDetailsError) throw professorCourseDetailsError;
-          
-            courses = professorCourseDetails;
-          }
-        }
-          
-        setCourses(courses);
+        setCourses(coursesWithCovers);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       } finally {
@@ -108,30 +63,32 @@ const Dashboard = () => {
         
     fetchUserRoleAndCourses();
   }, []);
-
-    return (
-        <div className="min-h-screen bg-gray-100">
-            <main className="p-6">
-                <div className="bg-white shadow-md rounded p-4">
-                    <h3 className="text-xl font-bold mb-4">Your Courses</h3>
-                    {courses.length > 0 ? (
-                    <div className={`inline-flex gap-6 max-w-full`}>
-                    <div className="flex overflow-x-auto gap-6">
-                        {courses.slice(0,3).map((item) => (
-                            <CourseCard
-                                key={item.id}
-                                title={item.name}
-                                description={item.description}
-                                image="https://via.placeholder.com/300" // Placeholder image lmao
-                            />
-                        ))}
-                    </div>
-                        <ViewAllButton redirectLink={"/"}></ViewAllButton>
-                    </div>) : <p>No courses found.</p>}
-                </div>
-            </main>
+  return (
+    <div className="min-h-screen bg-gray-100">
+      <main className="p-6">
+        <div className="bg-white shadow-md rounded p-4">
+          <h3 className="text-xl font-bold mb-4">Your Courses</h3>
+          {courses.length > 0 ? (
+            <div className={`inline-flex gap-6 max-w-full`}>
+              <div className="flex overflow-x-auto gap-6">
+                {courses.slice(0, 3).map((item) => (
+                  <CourseCard
+                    key={item.id}
+                    title={item.name}
+                    description={item.description}
+                    image={item.coverImageUrl}
+                  />
+                ))}
+              </div>
+              <ViewAllButton redirectLink={"/"}></ViewAllButton>
+            </div>
+          ) : (
+            <p>No courses found. Wait to be enrolled in some courses or for an admin to admit you.</p>
+          )}
         </div>
-    );
+      </main>
+    </div>
+  );
 };
 
 export default Dashboard;
