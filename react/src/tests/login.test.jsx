@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { supabase } from "./../supabase.js"; // Mock this for testing
+import { supabase } from "./../supabase.js";
 import { toast } from "react-toastify";
 import { useLoading } from "./../context/LoadingContext";
 import Login from "./../pages/Login/login";
@@ -12,7 +12,6 @@ jest.mock("./../supabase.js", () => ({
         auth: {
             signInWithPassword: jest.fn(),
             resetPasswordForEmail: jest.fn(),
-            getUser: jest.fn(),
         },
     },
 }));
@@ -31,7 +30,6 @@ jest.mock("./../context/LoadingContext", () => ({
 }));
 
 describe("Login Component", () => {
-    // Clear mocks before each test
     beforeEach(() => {
         jest.clearAllMocks();
     });
@@ -44,10 +42,11 @@ describe("Login Component", () => {
             </Router>
         );
 
-        expect(screen.getByText("Enter Credentials")).toBeInTheDocument();
+        expect(screen.getByText(/enter credentials/i)).toBeInTheDocument();
         expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
         expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
-        expect(screen.getByText(/login/i)).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /login/i })).toBeInTheDocument();
+        expect(screen.getByText(/forgot password/i)).toBeInTheDocument();
     });
 
     // Test Case: TC_Login_02
@@ -62,7 +61,7 @@ describe("Login Component", () => {
 
         fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: "test@example.com" } });
         fireEvent.change(screen.getByPlaceholderText(/password/i), { target: { value: "password123" } });
-        fireEvent.click(screen.getByText(/login/i));
+        fireEvent.click(screen.getByRole("button", { name: /login/i }));
 
         await waitFor(() => {
             expect(supabase.auth.signInWithPassword).toHaveBeenCalledWith({
@@ -74,7 +73,10 @@ describe("Login Component", () => {
 
     // Test Case: TC_Login_03
     test("TC_Login_03: Test login with invalid credentials", async () => {
-        supabase.auth.signInWithPassword.mockResolvedValue({ data: null, error: { message: "Invalid login credentials" } });
+        supabase.auth.signInWithPassword.mockResolvedValue({
+            data: null,
+            error: { message: "Invalid login credentials" },
+        });
 
         render(
             <Router>
@@ -84,7 +86,7 @@ describe("Login Component", () => {
 
         fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: "wrong@example.com" } });
         fireEvent.change(screen.getByPlaceholderText(/password/i), { target: { value: "wrongpassword" } });
-        fireEvent.click(screen.getByText(/login/i));
+        fireEvent.click(screen.getByRole("button", { name: /login/i }));
 
         await waitFor(() => {
             expect(toast.error).toHaveBeenCalledWith("Invalid login credentials");
@@ -100,7 +102,7 @@ describe("Login Component", () => {
         );
 
         fireEvent.change(screen.getByPlaceholderText(/password/i), { target: { value: "password123" } });
-        fireEvent.click(screen.getByText(/login/i));
+        fireEvent.click(screen.getByRole("button", { name: /login/i }));
 
         await waitFor(() => {
             expect(toast.error).toHaveBeenCalledWith("Email is required");
@@ -116,7 +118,7 @@ describe("Login Component", () => {
         );
 
         fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: "test@example.com" } });
-        fireEvent.click(screen.getByText(/login/i));
+        fireEvent.click(screen.getByRole("button", { name: /login/i }));
 
         await waitFor(() => {
             expect(toast.error).toHaveBeenCalledWith("Password is required");
@@ -133,7 +135,7 @@ describe("Login Component", () => {
 
         fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: "invalid-email" } });
         fireEvent.change(screen.getByPlaceholderText(/password/i), { target: { value: "password123" } });
-        fireEvent.click(screen.getByText(/login/i));
+        fireEvent.click(screen.getByRole("button", { name: /login/i }));
 
         await waitFor(() => {
             expect(toast.error).toHaveBeenCalledWith("Invalid email format");
