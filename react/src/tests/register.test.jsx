@@ -28,6 +28,7 @@ describe('Register Component', () => {
     });
 
     test('TC_Register_01: Verify that the registration form displays correctly.', () => {
+        // Ensure all fields are rendered
         expect(screen.getByLabelText(/first name/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/last name/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
@@ -39,15 +40,19 @@ describe('Register Component', () => {
         const mockResponse = { data: {}, error: null };
         supabase.auth.signUp.mockResolvedValue(mockResponse);
 
+        // Simulate user input
         fireEvent.change(screen.getByLabelText(/first name/i), { target: { value: 'John' } });
         fireEvent.change(screen.getByLabelText(/last name/i), { target: { value: 'Doe' } });
         fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'john.doe@example.com' } });
         fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
         fireEvent.change(screen.getByLabelText(/confirm password/i), { target: { value: 'password123' } });
-        fireEvent.click(screen.getByText(/next/i));
-        fireEvent.click(screen.getByText(/submit/i));
 
-        await waitFor(() => expect(supabase.auth.signUp).toHaveBeenCalled());
+        fireEvent.click(screen.getByText(/next/i)); // Click next button
+        fireEvent.click(screen.getByText(/submit/i)); // Submit registration form
+
+        await waitFor(() => {
+            expect(supabase.auth.signUp).toHaveBeenCalled();
+        });
         expect(mockSetLoading).toHaveBeenCalledWith(false);
     });
 
@@ -58,7 +63,9 @@ describe('Register Component', () => {
         fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'existing.email@example.com' } });
         fireEvent.click(screen.getByText(/submit/i));
 
-        await waitFor(() => expect(screen.getByText(/email is already in use/i)).toBeInTheDocument());
+        await waitFor(() => {
+            expect(screen.getByText(/email is already in use/i)).toBeInTheDocument();
+        });
     });
 
     test('TC_Register_04: Test registration with mismatched password and confirm password.', () => {
@@ -96,7 +103,9 @@ describe('Register Component', () => {
         fireEvent.change(screen.getByLabelText(/confirm password/i), { target: { value: 'password123' } });
         fireEvent.click(screen.getByText(/submit/i));
 
-        await waitFor(() => expect(mockSetLoading).toHaveBeenCalledWith(false));
+        await waitFor(() => {
+            expect(mockSetLoading).toHaveBeenCalledWith(false);
+        });
         expect(supabase.auth.signUp).toHaveBeenCalled();
     });
 });
