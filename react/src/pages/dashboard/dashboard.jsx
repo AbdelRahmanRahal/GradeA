@@ -98,7 +98,20 @@ const Dashboard = () => {
           }
         }
           
-        setCourses(courses);
+        // Fetch public URLs for cover images
+        const coursesWithImages = await Promise.all(
+          courses.map(async (course) => {
+            if (course.cover_image) {
+              const { data: imageData } = supabase.storage
+                .from("covers")
+                .getPublicUrl(course.cover_image);
+              return { ...course, imageUrl: imageData.publicUrl };
+            }
+            return { ...course, imageUrl: "https://via.placeholder.com/300" }; // Fallback for courses without cover images
+          })
+        );
+
+        setCourses(coursesWithImages);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       } finally {
@@ -108,30 +121,32 @@ const Dashboard = () => {
         
     fetchUserRoleAndCourses();
   }, []);
-
-    return (
-        <div className="min-h-screen bg-gray-100">
-            <main className="p-6">
-                <div className="bg-white shadow-md rounded p-4">
-                    <h3 className="text-xl font-bold mb-4">Your Courses</h3>
-                    {courses.length > 0 ? (
-                    <div className={`inline-flex gap-6 max-w-full`}>
-                    <div className="flex overflow-x-auto gap-6">
-                        {courses.slice(0,3).map((item) => (
-                            <CourseCard
-                                key={item.id}
-                                title={item.name}
-                                description={item.description}
-                                image="https://via.placeholder.com/300" // Placeholder image lmao
-                            />
-                        ))}
-                    </div>
-                        <ViewAllButton redirectLink={"/"}></ViewAllButton>
-                    </div>) : <p>No courses found.</p>}
-                </div>
-            </main>
+  return (
+    <div className="min-h-screen bg-gray-100">
+      <main className="p-6">
+        <div className="bg-white shadow-md rounded p-4">
+          <h3 className="text-xl font-bold mb-4">Your Courses</h3>
+          {courses.length > 0 ? (
+            <div className={`inline-flex gap-6 max-w-full`}>
+              <div className="flex overflow-x-auto gap-6">
+                {courses.slice(0, 3).map((item) => (
+                  <CourseCard
+                    key={item.id}
+                    title={item.name}
+                    description={item.description}
+                    image={item.imageUrl}
+                  />
+                ))}
+              </div>
+              <ViewAllButton redirectLink={"/"}></ViewAllButton>
+            </div>
+          ) : (
+            <p>No courses found. Wait to be enrolled in some courses or for an admin to admit you.</p>
+          )}
         </div>
-    );
+      </main>
+    </div>
+  );
 };
 
 export default Dashboard;
