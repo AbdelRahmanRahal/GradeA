@@ -1,13 +1,13 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { supabase } from "../../supabase.js"; // Mock this for testing
+import { supabase } from "./../supabase.js"; // Mock this for testing
 import { toast } from "react-toastify";
-import { useLoading } from "../../context/LoadingContext";
-import Login from "./Login";
+import { useLoading } from "./../context/LoadingContext";
+import Login from "./../pages/Login/login";
 
 // Mock dependencies
-jest.mock("../../supabase.js", () => ({
+jest.mock("./../supabase.js", () => ({
     supabase: {
         auth: {
             signInWithPassword: jest.fn(),
@@ -24,7 +24,7 @@ jest.mock("react-toastify", () => ({
     },
 }));
 
-jest.mock("../../context/LoadingContext", () => ({
+jest.mock("./../context/LoadingContext", () => ({
     useLoading: () => ({
         setLoading: jest.fn(),
     }),
