@@ -15,12 +15,14 @@
     "@supabase/supabase-js": "^2.47.10",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
+    "jest-environment-jsdom": "^29.7.0",
     "json-server": "^1.0.0-beta.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.0.1",
-    "react-toastify": "^10.0.6"
+    "react-toastify": "^10.0.6",
+    "util": "^0.12.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.26.4",
@@ -48,6 +50,14 @@
   "jest": {
     "transform": {
       "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
-    }
+    },
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "<rootDir>/src/__mocks__/styleMock.js"
+    },
+    "setupFilesAfterEnv": ["<rootDir>/src/utils/jest-setup.js"],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-toastify)/)"
+    ],
+    "testEnvironment": "jsdom"
   }
 }
