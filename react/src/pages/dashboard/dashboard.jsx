@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "../../supabase.js";
 import { useNavigate } from "react-router-dom";
 import CourseCard from "./components/CourseCard";
-import Loading from "../../components/Loading.jsx";
 import { useLoading } from '../../context/LoadingContext';
 import ViewAllButton from "./components/ViewAllButton.jsx";
 
