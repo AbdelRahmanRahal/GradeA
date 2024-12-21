@@ -1,13 +1,13 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { supabase } from "../../supabase.js"; // Mock this for testing
+import { supabase } from "./../supabase.js"; // Mock this for testing
 import { toast } from "react-toastify";
-import { useLoading } from "../../context/LoadingContext";
-import Login from "./Login";
+import { useLoading } from "./../context/LoadingContext";
+import Login from "./../pages/Login/login";
 
 // Mock dependencies
-jest.mock("../../supabase.js", () => ({
+jest.mock("./../supabase.js", () => ({
     supabase: {
         auth: {
             signInWithPassword: jest.fn(),
@@ -24,7 +24,7 @@ jest.mock("react-toastify", () => ({
     },
 }));
 
-jest.mock("../../context/LoadingContext", () => ({
+jest.mock("./../context/LoadingContext", () => ({
     useLoading: () => ({
         setLoading: jest.fn(),
     }),
@@ -91,5 +91,86 @@ describe("Login Component", () => {
         });
     });
 
-    // Other test cases...
+    // Test Case: TC_Login_04
+    test("TC_Login_04: Test login with empty email field", async () => {
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
+        fireEvent.change(screen.getByPlaceholderText(/password/i), { target: { value: "password123" } });
+        fireEvent.click(screen.getByText(/login/i));
+
+        await waitFor(() => {
+            expect(toast.error).toHaveBeenCalledWith("Email is required");
+        });
+    });
+
+    // Test Case: TC_Login_05
+    test("TC_Login_05: Test login with empty password field", async () => {
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
+        fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: "test@example.com" } });
+        fireEvent.click(screen.getByText(/login/i));
+
+        await waitFor(() => {
+            expect(toast.error).toHaveBeenCalledWith("Password is required");
+        });
+    });
+
+    // Test Case: TC_Login_06
+    test("TC_Login_06: Test login with incorrect email format", async () => {
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
+        fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: "invalid-email" } });
+        fireEvent.change(screen.getByPlaceholderText(/password/i), { target: { value: "password123" } });
+        fireEvent.click(screen.getByText(/login/i));
+
+        await waitFor(() => {
+            expect(toast.error).toHaveBeenCalledWith("Invalid email format");
+        });
+    });
+
+    // Test Case: TC_Login_07
+    test("TC_Login_07: Test forgot password functionality", async () => {
+        supabase.auth.resetPasswordForEmail.mockResolvedValue({ data: {}, error: null });
+
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
+        fireEvent.change(screen.getByPlaceholderText(/email/i), { target: { value: "test@example.com" } });
+        fireEvent.click(screen.getByText(/forgot password/i));
+
+        await waitFor(() => {
+            expect(supabase.auth.resetPasswordForEmail).toHaveBeenCalledWith("test@example.com");
+            expect(toast.info).toHaveBeenCalledWith("Password reset email sent");
+        });
+    });
+
+    // Test Case: TC_Login_08
+    test("TC_Login_08: Test forgot password with empty email field", async () => {
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
+        fireEvent.click(screen.getByText(/forgot password/i));
+
+        await waitFor(() => {
+            expect(toast.error).toHaveBeenCalledWith("Please enter an email");
+        });
+    });
 });

@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Register from '../Register'; // Adjust the path as needed
+import Register from './../pages/Register/register';
 import { MemoryRouter } from 'react-router-dom';
-import { LoadingContext } from '../../context/LoadingContext'; // Adjust based on context implementation
-import { supabase } from '../../supabase';
+import { LoadingContext } from './../context/LoadingContext';
+import { supabase } from './../supabase';
 
-jest.mock('../../supabase', () => ({
+jest.mock('./../supabase', () => ({
     supabase: {
         auth: {
             signUp: jest.fn(),
