@@ -74,6 +74,7 @@ const Login = () => {
     });
 
     if (error) {
+      setLoading(false);
       if (error.message.includes("Invalid login credentials")) {
         setFormErrors((prevErrors) => ({
           ...prevErrors,

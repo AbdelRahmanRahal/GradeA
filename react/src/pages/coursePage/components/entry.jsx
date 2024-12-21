@@ -1,15 +1,22 @@
 import React from 'react';
 import {AccessButton, EditButton, RemoveButton} from "../../coursesList/components/ButtonA.jsx";
-import { FaVideo, FaPenSquare, FaExclamationCircle } from "react-icons/fa";
+import { FaVideo, FaLink, FaExclamationCircle, FaCircleNotch } from "react-icons/fa";
 
-const Entry = ({entryData, role}) => {
+const Entry = ({entryData, role, onEditEntry, onRemoveEntry}) => {
     return (
         <section className='py-4 min-w-full'>
             <div>
                 <div>
-                    <h2 className='text-2xl font-bold h-12 mt-2 ml-5'>{entryData.title}</h2>
+                    {entryData.type === "link" && entryData.url.includes('youtube.com') &&
+                        <h2 className='text-2xl font-bold h-12 mt-2 ml-5 flex'><FaVideo className={`mt-1 mr-2`} />{entryData.title}</h2> }
+                    {entryData.type === "link" && !entryData.url.includes('youtube.com') &&
+                        <h2 className='text-2xl font-bold h-12 mt-2 ml-5 flex'><FaLink className={`mt-1 mr-2`} />{entryData.title}</h2> }
+                    {entryData.type === "text" &&
+                        <h2 className='text-2xl font-bold h-12 mt-2 ml-5 flex'><FaCircleNotch className={`mt-1 mr-2`} />{entryData.title}</h2> }
+                    {entryData.type === "assignment" &&
+                        <h2 className='text-2xl font-bold h-12 mt-2 ml-5 flex'><FaExclamationCircle className={`mt-1 mr-2`} />{entryData.title}</h2> }
                     <div>
-                        <p className='mt-2 mb-4 ml-6 min-h-12'>
+                        <p className='mt-2 ml-6 min-h-12'>
                             {entryData.type === "text" ? entryData.content : entryData.description}
                         </p>
                     </div>
@@ -22,6 +29,7 @@ const Entry = ({entryData, role}) => {
                     {(entryData.type) === "link" && entryData.url.includes('youtube.com') &&
                         (
                             <iframe
+                                className={`ml-8 mb-6`}
                                 width="560"
                                 height="315"
                                 src={`https://www.youtube.com/embed/${getYouTubeVideoId(entryData.url)}`}
@@ -32,12 +40,12 @@ const Entry = ({entryData, role}) => {
                         )}
                     {(entryData.type) === "assignment" &&
                         (
-                            <p>Due Date: {entryData.dueDate}</p>
+                            <p className={`ml-6`}>Due Date: {entryData.dueDate}</p>
                         )}
                     {role === 'instructor' &&
-                        <div className="flex gap-2">
-                            <EditButton/>
-                            <RemoveButton/>
+                        <div className="flex gap-2 mt-3">
+                            <EditButton onClick={onEditEntry}/>
+                            <RemoveButton onClick={onRemoveEntry}/>
                         </div>
                     }
                 </div>

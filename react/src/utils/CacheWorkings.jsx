@@ -25,9 +25,9 @@ export const fetchFirstName = async () => {
 
     if (!localStorage.getItem('cachedFirstName')) {
         await createCache();
-        console.log("It had to create cache!!!")
+        console.log("It had to create cache!!! >:3")
     }
-    else {console.log("It did not have to create cache!")}
+    else {console.log("It did not have to create cache! :3")}
         return localStorage.getItem('cachedFirstName');
 };
 

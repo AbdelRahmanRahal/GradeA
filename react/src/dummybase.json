@@ -91,12 +91,23 @@
       "id": "105",
       "name": "Philosophy of Not Going To Uni",
       "description": "Exploring the deeper meaning of not going to uni. yeah. just that xd"
+    },
+    {
+      "id": "44f2",
+      "name": "sadasfs",
+      "description": "fasaddf"
+    },
+    {
+      "id": "84c2",
+      "name": "sadasfs",
+      "description": "123123"
     }
   ],
   "course": [
     {
       "id": "101",
       "name": "Introduction to Random Stuff",
+      "description": "Introduction to doing random stuff, it's so much fun being random..",
       "sections": [
         {
           "id": "1",
@@ -155,6 +166,7 @@
     {
       "id": "102",
       "name": "Introduction to Mogging",
+      "description": "An overview of how to mog your opps.",
       "sections": [
         {
           "id": "1",
