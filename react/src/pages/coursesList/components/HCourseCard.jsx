@@ -21,7 +21,7 @@ const HCourseCard = ({title, description, image, role, courseID, onRemove, onEdi
                             {description}
                         </p>
                     </div>
-                    {role === 'instructor' &&
+                    {role === 'professor' &&
                     <div className="flex gap-2">
                         <EditButton onClick={onEdit}/>
                         <RemoveButton onClick={onRemove} />

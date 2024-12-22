@@ -57,7 +57,7 @@ const Section = ({ sectionData, role, onEdit, onRemove, onAddEntry, onEditEntry,
                 {/* Vertical line from the title */}
                 <div className="absolute left-0 top-0 h-full border-l-2 border-gray-600"></div>
                 <h2 className="text-2xl m-4 font-bold pl-6">{sectionData.title}</h2>
-                {role === 'instructor' && (
+                {role === 'professor' && (
                     <div className="flex flex-1 gap-2 items-center">
                         <EditButton onClick={onEdit} />
                         <RemoveButton onClick={onRemove} />
