@@ -94,13 +94,15 @@ const CoursePage = () => {
         if (profile.role === "admin") navigate("/admin");
 
         // Fetch full course details
-        const { data: courseDetails, error: courseDetailsError } =
+        const { data: coursesDetails, error: coursesDetailsError } =
           await supabase
             .from("courses_with_covers")
             .select("*")
             .eq("course_id", id);
 
-        if (courseDetailsError) throw courseDetailsError;
+        if (coursesDetailsError) throw coursesDetailsError;
+
+        const courseDetails = coursesDetails[0];
 
         // Fetch public URL for cover image
         const course = {
