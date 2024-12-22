@@ -31,7 +31,6 @@ const coursesList = () => {
     setData: setCourses,
   });
 
-  //for creation
   const handleCreateCourse = async (courseData) => {
     try {
       console.log("DEFINITELY USING ADDCOURDAsaasfASDSE");
@@ -40,9 +39,7 @@ const coursesList = () => {
       console.error("Error creating course:", error);
     }
   };
-  //end of creation
 
-  //for edit
   const handleEditCourse = async (courseData) => {
     try {
       console.log("the id should be" + courseData?.id);
@@ -56,9 +53,7 @@ const coursesList = () => {
     setSelectedEditCourse(course);
     setOpenEditDialog(true);
   };
-  //end of edit
 
-  // for deletion
   const handleOpenDialog = (course) => {
     setSelectedCourse(course);
     setDialogOpen(true); // Open the dialog
@@ -74,7 +69,6 @@ const coursesList = () => {
     // Perform the remove logic here (e.g., API call, state update)
     handleCloseDialog(); // Close the dialog after confirming
   };
-  //end for deletion
 
   const truncateDescription = (description, maxLength) => {
     if (description.length <= maxLength) {
