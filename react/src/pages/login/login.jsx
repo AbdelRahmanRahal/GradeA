@@ -11,6 +11,7 @@ import { validateEmail } from '../../utils/FormValidateInfo.jsx';
 import { useLoading } from '../../context/LoadingContext';
 import Loading from "../../components/Loading.jsx";
 
+
 const Login = () => {
   const [formErrors, setFormErrors] = useState({});
   const [email, setEmail] = useState("");
