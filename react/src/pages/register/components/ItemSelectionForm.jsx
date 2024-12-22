@@ -6,7 +6,7 @@ const ItemSelectionForm = ({role, items, setSelectedItems, selectedItems}) => {
             // Students can only select one
             setSelectedItems(checked ? [abbreviation] : []);
         } else {
-            // Instructors can select multiple
+            // Professors can select multiple
             setSelectedItems(
                 checked
                     ? [...selectedItems, abbreviation]

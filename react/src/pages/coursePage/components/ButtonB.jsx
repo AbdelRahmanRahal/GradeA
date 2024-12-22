@@ -1,5 +1,5 @@
     import React, {useState} from 'react';
-    import { FaArrowRight, FaPlus, FaTrash, FaPenSquare } from "react-icons/fa";
+    import { FaArrowRight, FaPlus, FaTrash, FaPenSquare, FaPlusCircle } from "react-icons/fa";
     import {useNavigate} from "react-router-dom";
     import "../../../index.css"
 
@@ -36,10 +36,10 @@
         />
     );
 
-    const AddButton = ({ courseID, onClick }) => (
+    const AddButton = ({ courseID, onClick, buttonFeature }) => (
         <BaseButton
-            text={<FaPlus/>}
-            className="text-gray-500 hover:text-black py-0 align-middle pt-1"
+            text={<FaPlusCircle/>}
+            className={`text-4xl rounded ${buttonFeature} text-center align-middle`}
             courseID={courseID}
             onClick={onClick}
         />

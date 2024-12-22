@@ -51,7 +51,6 @@ const Dashboard = () => {
             .from(course.cover_image_bucket)
             .getPublicUrl(course.cover_image_name).data.publicUrl : "https://via.placeholder.com/300"
         }));
-        console.log(coursesWithCovers);
 
         setCourses(coursesWithCovers);
       } catch (error) {
@@ -76,6 +75,7 @@ const Dashboard = () => {
                     key={item.id}
                     title={item.name}
                     description={item.description}
+                    courseID={item.id}
                     image={item.coverImageUrl}
                   />
                 ))}
