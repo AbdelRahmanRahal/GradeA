@@ -1,0 +1,152 @@
+{
+  "students": [
+    {
+      "id": "1",
+      "first-name": "Kazuma",
+      "last-name": "Kiryu",
+      "email": "DragonofDojima@gmail.com",
+      "password": "123123"
+    },
+    {
+      "id": "2",
+      "first-name": "Majima",
+      "last-name": "Goro",
+      "email": "MadDogofShimano@gmail.com",
+      "password": "12341234"
+    },
+    {
+      "id": "3",
+      "first-name": "Shun",
+      "last-name": "Akiyama",
+      "email": "LifelineofKamurocho@gmail.com",
+      "password": "1234512345"
+    },
+    {
+      "id": "e698",
+      "firstname": "mahmoud",
+      "lastname": "mohamed",
+      "email": "m.mohamed2213@nu.edu.eg",
+      "password": "MA_4112004",
+      "selectedItems": [
+        "CS"
+      ]
+    }
+  ],
+  "instructors": [
+    {
+      "id": "1",
+      "first-name": "Yakuza",
+      "last-name": "Man",
+      "email": "LMAO@gmail.com",
+      "password": "123123"
+    },
+    {
+      "id": "2",
+      "first-name": "Civilization",
+      "last-name": "Goro",
+      "email": "ROFL@gmail.com",
+      "password": "12341234"
+    },
+    {
+      "id": "3",
+      "first-name": "jojo",
+      "last-name": "JOJOa",
+      "email": "JOJO@gmail.com",
+      "password": "1234512345"
+    }
+  ],
+  "fields": [
+    {
+      "id": "1",
+      "name": "Computer Science",
+      "abbreviation": "CS"
+    },
+    {
+      "id": "2",
+      "name": "Biomedical",
+      "abbreviation": "BM"
+    },
+    {
+      "id": "3",
+      "name": "Jujutsu Arts",
+      "abbreviation": "JJK"
+    },
+    {
+      "id": "4",
+      "name": "Mathematics",
+      "abbreviation": "MATH"
+    },
+    {
+      "id": "5",
+      "name": "Physics",
+      "abbreviation": "PHY"
+    },
+    {
+      "id": "6",
+      "name": "Chemistry",
+      "abbreviation": "CHEM"
+    },
+    {
+      "id": "7",
+      "name": "Philosophy",
+      "abbreviation": "PHIL"
+    },
+    {
+      "id": "8",
+      "name": "Psychology",
+      "abbreviation": "PSY"
+    },
+    {
+      "id": "9",
+      "name": "Engineering",
+      "abbreviation": "ENG"
+    },
+    {
+      "id": "10",
+      "name": "Art History",
+      "abbreviation": "AH"
+    },
+    {
+      "id": "11",
+      "name": "Political Science",
+      "abbreviation": "POL"
+    },
+    {
+      "id": "12",
+      "name": "Economics",
+      "abbreviation": "ECO"
+    },
+    {
+      "id": "13",
+      "name": "Sociology",
+      "abbreviation": "SOC"
+    }
+  ],
+  "courses": [
+    {
+      "id": "101",
+      "name": "Introduction to Random Stuff",
+      "description": "An overview of random and unrelated topics to stimulate curiosity and creative thinking."
+    },
+    {
+      "id": "102",
+      "name": "Introduction to Mogging",
+      "description": "An overview of how to mog your opps."
+    },
+    {
+      "id": "103",
+      "name": "The Art of Rizz",
+      "description": "A deep dive into the philosophy and techniques of rizzing your professors and TAs. Courtesy of Robin"
+    },
+    {
+      "id": "104",
+      "name": "Advanced Spyology",
+      "description": "An advanced study of spying and stalking."
+    },
+    {
+      "id": "105",
+      "name": "Philosophy of Not Going To Uni",
+      "description": "Exploring the deeper meaning of not going to uni. yeah. just that xd"
+    }
+  ]
+}

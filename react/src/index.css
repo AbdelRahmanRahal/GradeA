@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+    .gradient-box {
+        background: linear-gradient(to left, black 50%, #DC2626 50%) right;
+        background-size: 200%;
+        transition: background-position 0.5s ease-out;
+    }
+
+    .gradient-box:hover {
+        background-position: left;
+    }
+}
