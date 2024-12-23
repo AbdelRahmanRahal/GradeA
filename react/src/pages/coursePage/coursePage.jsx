@@ -132,83 +132,83 @@ const CoursePage = () => {
     fetchUserRoleAndCourse();
   }, [id, setLoading]);
 
-    return (
-      <div className="min-h-screen bg-gray-100">
-        {data?.name && (
-          <h1
-            className={`min-w-full bg-red-600 text-white text-center justify-center text-5xl min-h-16 flex`}
-          >
-            {data.name}{" "}
-            {role === "professor" && (
-              <AddButton
-                onClick={() => setOpenCreateSectionDialog(true)}
-                buttonFeature={"ml-1 mb-2.5 text-gray-300 hover:text-gray-400"}
-              />
-            )}
-          </h1>
-        )}
-        <div className={`flex`}>
-          <main className="p-6 w-4/5">
-            {data ? (
-              <div className="flex flex-col gap-y-6">
-                {data?.sections?.length > 0 ? (
-                  data.sections.map((section) => (
-                    <Section
-                      key={section.id}
-                      sectionData={section}
-                      role={role}
-                      onEdit={() => {
-                        console.log("jermisadasde" + data?.id);
-                        handleEditSectionDialog(section);
-                      }}
-                      onRemove={() => handleOpenDeleteSectionDialog(section)}
-                    ></Section>
-                  ))
-                ) : (
-                  <h2>No entries available, issue is in coursePage.</h2>
-                )}
-              </div>
-            ) : (
-              <h2>No data found.</h2>
-            )}
-          </main>
-            <div className={`w-1/5 ml-auto mt-6 mr-3`}>
-          <DescriptionBox></DescriptionBox>
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {course?.name && (
+        <h1
+          className={`min-w-full bg-red-600 text-white text-center justify-center text-5xl min-h-16 flex`}
+        >
+          {course.name}{" "}
+          {role === "professor" && (
+            <AddButton
+              onClick={() => setOpenCreateSectionDialog(true)}
+              buttonFeature={"ml-1 mb-2.5 text-gray-300 hover:text-gray-400"}
+            />
+          )}
+        </h1>
+      )}
+      <div className={`flex`}>
+        <main className="p-6 w-4/5">
+          {course ? (
+            <div className="flex flex-col gap-y-6">
+              {course?.sections?.length > 0 ? (
+                course.sections.map((section) => (
+                  <Section
+                    key={section.id}
+                    sectionData={section}
+                    role={role}
+                    onEdit={() => {
+                      console.log("jermisadasde" + course?.id);
+                      handleEditSectionDialog(section);
+                    }}
+                    onRemove={() => handleOpenDeleteSectionDialog(section)}
+                  ></Section>
+                ))
+              ) : (
+                <h2>No entries available, issue is in coursePage.</h2>
+              )}
             </div>
+          ) : (
+            <h2>No data found.</h2>
+          )}
+        </main>
+        <div className={`w-1/5 ml-auto mt-6 mr-3`}>
+          <DescriptionBox></DescriptionBox>
         </div>
-        <CreateSectionDialog
-          open={openCreateSectionDialog}
-          onClose={() => setOpenCreateSectionDialog(false)}
-          onCreateSection={handleCreateSection}
-          courseID={data?.id}
-        />
-        <EditSectionDialog // const EditSectionDialog = ({ open, onClose, section, onEditSection }) =>
-          open={openEditSectionDialog}
-          onClose={() => setOpenEditSectionDialog(false)}
-          section={selectedEditSection}
-          onEditSection={handleEditSection}
-          courseID={data?.id}
-        />
-        <SectionResponsiveDialog
-          open={deleteSectionDialogOpen}
-          onClose={() => setDeleteSectionDialogOpen(false)}
-          title="Confirm Remove"
-          content={`Are you sure you want to remove the section "${selectedSection?.name}"?`}
-          actions={[
-            {
-              label: "Cancel",
-              onClick: () => setDeleteSectionDialogOpen(false),
-            },
-            {
-              label: "Remove",
-              onClick: () =>
-                handleConfirmRemoveSection(data?.id, selectedSection?.id),
-              color: "error",
-            },
-          ]}
-        />
       </div>
-    );
+      <CreateSectionDialog
+        open={openCreateSectionDialog}
+        onClose={() => setOpenCreateSectionDialog(false)}
+        onCreateSection={handleCreateSection}
+        courseID={course?.id}
+      />
+      <EditSectionDialog // const EditSectionDialog = ({ open, onClose, section, onEditSection }) =>
+        open={openEditSectionDialog}
+        onClose={() => setOpenEditSectionDialog(false)}
+        section={selectedEditSection}
+        onEditSection={handleEditSection}
+        courseID={course?.id}
+      />
+      <SectionResponsiveDialog
+        open={deleteSectionDialogOpen}
+        onClose={() => setDeleteSectionDialogOpen(false)}
+        title="Confirm Remove"
+        content={`Are you sure you want to remove the section "${selectedSection?.name}"?`}
+        actions={[
+          {
+            label: "Cancel",
+            onClick: () => setDeleteSectionDialogOpen(false),
+          },
+          {
+            label: "Remove",
+            onClick: () =>
+              handleConfirmRemoveSection(course?.id, selectedSection?.id),
+            color: "error",
+          },
+        ]}
+      />
+    </div>
+  );
 };
 
 export default CoursePage;
