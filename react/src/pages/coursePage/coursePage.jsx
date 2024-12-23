@@ -6,6 +6,7 @@ import SectionModifyUtils from "./utils/SectionModifyUtils.jsx";
 import Section from './components/section.jsx';
 import { AddButton } from './components/buttonB.jsx';
 import {CreateSectionDialog, EditSectionDialog, SectionResponsiveDialog} from "./components/SectionResponsiveDialog.jsx";
+import DescriptionBox from "./components/DescriptionBox.jsx";
 
 
 const CoursePage = () => {
@@ -68,78 +69,109 @@ const CoursePage = () => {
     //end for deletion
 
     useEffect(() => {
-        const getRole = async () => {
-            const role = await fetchRole();
-            setRole(role);};
-        getRole();
+      const getRole = async () => {
+        const role = await fetchRole();
+        setRole(role);
+      };
+      getRole();
 
-        const fetchCourseData = async () => {
-            setLoading(true);
+      const fetchCourseData = async () => {
+        setLoading(true);
 
-            try {
-                const response = await fetch(`/api/course/${id}`);
-                if (response.ok) {
-                    const courseData = await response.json();
-                    setData(courseData); // Set course data
-                } else {
-                    console.error('Failed to fetch course data');
-                }
-            } catch (error) {
-                console.error('Error fetching courses:', error);
-            } finally {
-                setLoading(false); // Ensure loading state is stopped after fetching
-            }
-        };
+        try {
+          const response = await fetch(`/api/course/${id}`);
+          if (response.ok) {
+            const courseData = await response.json();
+            setData(courseData); // Set course data
+          } else {
+            console.error("Failed to fetch course data");
+          }
+        } catch (error) {
+          console.error("Error fetching courses:", error);
+        } finally {
+          setLoading(false); // Ensure loading state is stopped after fetching
+        }
+      };
 
-        fetchCourseData(); // Call the async function to fetch data
+      fetchCourseData(); // Call the async function to fetch data
     }, [id, setLoading]);
 
-
     return (
-        <div className="min-h-screen bg-gray-100">
-            {data?.name && (<h1 className={`min-w-full bg-red-600 text-white text-center justify-center text-5xl min-h-16 flex`}>{data.name} {role === 'instructor' &&
-            <AddButton onClick={() => setOpenCreateSectionDialog(true)}
-            buttonFeature={"ml-1 mb-2.5 text-gray-300 hover:text-gray-400"}/>}</h1>)}
-            <main className="p-6">
-                {data ? (
-                    <div className="flex flex-col gap-y-6">
-                        {data?.sections?.length > 0 ? data.sections.map((section) => (
-                            <Section
-                                key={section.id}
-                                sectionData={section}
-                                role={role}
-                                onEdit={() => {
-                                    console.log("jermisadasde" + data?.id);
-                                    handleEditSectionDialog(section);
-                                }}
-                                onRemove={() => handleOpenDeleteSectionDialog(section)}></Section>
-                        )) : (<h2>No entries available, issue is in coursePage.</h2>)}
-                    </div>) : (<h2>No data found.</h2>)}
-            </main>
-            <CreateSectionDialog
-                open={openCreateSectionDialog}
-                onClose={() => setOpenCreateSectionDialog(false)}
-                onCreateSection={handleCreateSection}
-                courseID={data?.id}
-            />
-            <EditSectionDialog // const EditSectionDialog = ({ open, onClose, section, onEditSection }) =>
-                open={openEditSectionDialog}
-                onClose={() => setOpenEditSectionDialog(false)}
-                section={selectedEditSection}
-                onEditSection={handleEditSection}
-                courseID={data?.id}
-            />
-            <SectionResponsiveDialog
-                open={deleteSectionDialogOpen}
-                onClose={() => setDeleteSectionDialogOpen(false)}
-                title="Confirm Remove"
-                content={`Are you sure you want to remove the section "${selectedSection?.name}"?`}
-                actions={[
-                    { label: "Cancel", onClick: () => setDeleteSectionDialogOpen(false) },
-                    { label: "Remove", onClick: ()=> handleConfirmRemoveSection(data?.id, selectedSection?.id), color: "error" },
-                ]}
-            />
+      <div className="min-h-screen bg-gray-100">
+        {data?.name && (
+          <h1
+            className={`min-w-full bg-red-600 text-white text-center justify-center text-5xl min-h-16 flex`}
+          >
+            {data.name}{" "}
+            {role === "instructor" && (
+              <AddButton
+                onClick={() => setOpenCreateSectionDialog(true)}
+                buttonFeature={"ml-1 mb-2.5 text-gray-300 hover:text-gray-400"}
+              />
+            )}
+          </h1>
+        )}
+        <div className={`flex`}>
+          <main className="p-6 w-4/5">
+            {data ? (
+              <div className="flex flex-col gap-y-6">
+                {data?.sections?.length > 0 ? (
+                  data.sections.map((section) => (
+                    <Section
+                      key={section.id}
+                      sectionData={section}
+                      role={role}
+                      onEdit={() => {
+                        console.log("jermisadasde" + data?.id);
+                        handleEditSectionDialog(section);
+                      }}
+                      onRemove={() => handleOpenDeleteSectionDialog(section)}
+                    ></Section>
+                  ))
+                ) : (
+                  <h2>No entries available, issue is in coursePage.</h2>
+                )}
+              </div>
+            ) : (
+              <h2>No data found.</h2>
+            )}
+          </main>
+            <div className={`w-1/5 ml-auto mt-6 mr-3`}>
+          <DescriptionBox></DescriptionBox>
+            </div>
         </div>
+        <CreateSectionDialog
+          open={openCreateSectionDialog}
+          onClose={() => setOpenCreateSectionDialog(false)}
+          onCreateSection={handleCreateSection}
+          courseID={data?.id}
+        />
+        <EditSectionDialog // const EditSectionDialog = ({ open, onClose, section, onEditSection }) =>
+          open={openEditSectionDialog}
+          onClose={() => setOpenEditSectionDialog(false)}
+          section={selectedEditSection}
+          onEditSection={handleEditSection}
+          courseID={data?.id}
+        />
+        <SectionResponsiveDialog
+          open={deleteSectionDialogOpen}
+          onClose={() => setDeleteSectionDialogOpen(false)}
+          title="Confirm Remove"
+          content={`Are you sure you want to remove the section "${selectedSection?.name}"?`}
+          actions={[
+            {
+              label: "Cancel",
+              onClick: () => setDeleteSectionDialogOpen(false),
+            },
+            {
+              label: "Remove",
+              onClick: () =>
+                handleConfirmRemoveSection(data?.id, selectedSection?.id),
+              color: "error",
+            },
+          ]}
+        />
+      </div>
     );
 };
 
