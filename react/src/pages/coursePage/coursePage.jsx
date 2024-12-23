@@ -10,6 +10,7 @@ import {
   EditSectionDialog,
   SectionResponsiveDialog,
 } from "./components/SectionResponsiveDialog.jsx";
+import DescriptionBox from "./components/DescriptionBox.jsx";
 import { supabase } from "../../supabase.js";
 
 const CoursePage = () => {
@@ -136,30 +137,35 @@ const CoursePage = () => {
           )}
         </h1>
       )}
-      <main className="p-6">
-        {course ? (
-          <div className="flex flex-col gap-y-6">
-            {course?.content?.length > 0 ? (
-              course.content.map((section) => (
-                <Section
-                  key={section.id}
-                  sectionData={section}
-                  role={role}
-                  onEdit={() => {
-                    console.log("jermisadasde" + course?.id);
-                    handleEditSectionDialog(section);
-                  }}
-                  onRemove={() => handleOpenDeleteSectionDialog(section)}
-                ></Section>
-              ))
-            ) : (
-              <h2>No entries available, issue is in coursePage.</h2>
-            )}
-          </div>
-        ) : (
-          <h2>No data found.</h2>
-        )}
-      </main>
+      <div className={`flex`}>
+        <main className="p-6 w-4/5">
+          {course ? (
+            <div className="flex flex-col gap-y-6">
+              {course?.sections?.length > 0 ? (
+                course.sections.map((section) => (
+                  <Section
+                    key={section.id}
+                    sectionData={section}
+                    role={role}
+                    onEdit={() => {
+                      console.log("jermisadasde" + course?.id);
+                      handleEditSectionDialog(section);
+                    }}
+                    onRemove={() => handleOpenDeleteSectionDialog(section)}
+                  ></Section>
+                ))
+              ) : (
+                <h2>No entries available, issue is in coursePage.</h2>
+              )}
+            </div>
+          ) : (
+            <h2>No data found.</h2>
+          )}
+        </main>
+        <div className={`w-1/5 ml-auto mt-6 mr-3`}>
+          <DescriptionBox></DescriptionBox>
+        </div>
+      </div>
       <CreateSectionDialog
         open={openCreateSectionDialog}
         onClose={() => setOpenCreateSectionDialog(false)}
@@ -179,7 +185,10 @@ const CoursePage = () => {
         title="Confirm Remove"
         content={`Are you sure you want to remove the section "${selectedSection?.name}"?`}
         actions={[
-          { label: "Cancel", onClick: () => setDeleteSectionDialogOpen(false) },
+          {
+            label: "Cancel",
+            onClick: () => setDeleteSectionDialogOpen(false),
+          },
           {
             label: "Remove",
             onClick: () =>

@@ -27,8 +27,8 @@ const ModifyUtils = ({ setData }) => {
     try {
       const { data, error } = await supabase
         .from("courses")
-        .insert([courseData]);
-      console.log(data)
+        .insert([courseData])
+        .select();
       if (error) {
         console.error("Failed to add course:", error.message);
       } else {
@@ -46,8 +46,9 @@ const ModifyUtils = ({ setData }) => {
       const { data, error } = await supabase
         .from("courses")
         .update({ ...updatedCourseData })
-        .eq("id", courseId);
-
+        .eq("id", courseId)
+        .select();
+      console.log(data);
       if (error) {
         console.error("Failed to update course:", error.message);
       } else {
