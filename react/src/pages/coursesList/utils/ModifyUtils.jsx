@@ -28,11 +28,12 @@ const ModifyUtils = ({ setData }) => {
       const { data, error } = await supabase
         .from("courses")
         .insert([courseData]);
+      console.log(data)
       if (error) {
         console.error("Failed to add course:", error.message);
       } else {
         setData((prevData) => [...prevData, data[0]]);
-        console.log(`Course ${data[0].id} added successfully.`);
+        // console.log(`Course ${data[0].id} added successfully.`);
       }
     } catch (error) {
       console.error("Error adding course:", error);

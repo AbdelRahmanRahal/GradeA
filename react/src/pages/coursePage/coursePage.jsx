@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLoading } from "../../context/LoadingContext";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchRole } from "../../utils/CacheWorkings.jsx";
 import SectionModifyUtils from "./utils/SectionModifyUtils.jsx";
 import Section from "./components/section.jsx";
@@ -13,6 +13,7 @@ import {
 import { supabase } from "../../supabase.js";
 
 const CoursePage = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { setLoading } = useLoading();
   const [role, setRole] = useState("student");
@@ -76,22 +77,11 @@ const CoursePage = () => {
       setLoading(true);
 
       try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) navigate("/login");
-        // Fetch the user's role from the profiles table
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", user.id)
-          .single();
+        const role = await fetchRole();
+        setRole(role);
+        if (!role) navigate("/login");
 
-        if (profileError) throw profileError;
-
-        setRole(profile.role);
-
-        if (profile.role === "admin") navigate("/admin");
+        if (role === "admin") navigate("/admin");
 
         // Fetch full course details
         const { data: coursesDetails, error: coursesDetailsError } =

@@ -33,7 +33,7 @@ const coursesList = () => {
 
   const handleCreateCourse = async (courseData) => {
     try {
-      console.log("DEFINITELY USING ADDCOURDAsaasfASDSE");
+      console.log("DEFINITELY USING ADDCssssssaasfASDSE");
       await addCourse(courseData);
     } catch (error) {
       console.error("Error creating course:", error);
@@ -88,22 +88,19 @@ const coursesList = () => {
       setLoading(true);
 
       try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) navigate("/login");
+        const role = await fetchRole();
+        setRole(role);
+        if (!role) navigate("/login");
         // Fetch the user's role from the profiles table
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", user.id)
-          .single();
+        // const { data: profile, error: profileError } = await supabase
+        //   .from("profiles")
+        //   .select("role")
+        //   .eq("id", user.id)
+        //   .single();
 
-        if (profileError) throw profileError;
+        // if (profileError) throw profileError;
 
-        setRole(profile.role);
-
-        if (profile.role === "admin") navigate("/admin");
+        if (role === "admin") navigate("/admin");
 
         // Fetch full course details
         const { data: coursesDetails, error: coursesDetailsError } =
