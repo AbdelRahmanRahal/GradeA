@@ -1,18 +1,20 @@
 import { useState } from 'react';
 
+import { supabase } from '../../../supabase.js';
+
 const SectionModifyUtils = ({ setData }) => {
     // Function to delete a section
     const deleteSection = async (sectionId, courseId) => {
         try {
-            const response = await fetch(`/api/course/${courseId}/sections/${sectionId}`, {
-                method: 'DELETE',
-            });
-            if (response.ok) {
-                // If successful, remove the deleted section from the state
-                setData((prevData) => prevData.filter((section) => section.id !== sectionId));
-                console.log(`Section ${sectionId} deleted successfully.`);
+            const { data, error } = await supabase
+                .from('courses')
+                .update({ content: setData((prevData) => prevData.filter((section) => section.id !== sectionId)) })
+                .eq('id', courseId);
+
+            if (error) {
+                console.error('Failed to delete section:', error.message);
             } else {
-                console.error('Failed to delete section:', response.statusText);
+                console.log(`Section ${sectionId} deleted successfully.`);
             }
         } catch (error) {
             console.error('Error deleting section:', error);
@@ -22,22 +24,15 @@ const SectionModifyUtils = ({ setData }) => {
     // Function to add a new section
     const addSection = async (sectionData, courseID) => {
         try {
-            console.log("SDAFFFFFFFFFFFFFFFFFFFFFFFFF" + courseID);
-            const response = await fetch(`/api/course/${courseID}/sections`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(sectionData),
-            });
+            const { data, error } = await supabase
+                .from('courses')
+                .update({ content: setData((prevData) => [...prevData, sectionData]) })
+                .eq('id', courseID);
 
-            if (response.ok) {
-                const newSection = await response.json();
-                // Update state with the new section
-                setData((prevData) => [...prevData, newSection]);
-                console.log(`Section ${newSection.id} added successfully.`);
+            if (error) {
+                console.error('Failed to add section:', error.message);
             } else {
-                console.error('Failed to add section:', response.statusText);
+                console.log(`Section ${sectionData.id} added successfully.`);
             }
         } catch (error) {
             console.error('Error adding section:', error);
@@ -47,25 +42,19 @@ const SectionModifyUtils = ({ setData }) => {
     // Function to edit an existing section
     const editSection = async (sectionId, updatedSectionData, courseId) => {
         try {
-            const response = await fetch(`/api/course/${courseId}/sections/${sectionId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedSectionData),
-            });
-
-            if (response.ok) {
-                const updatedSection = await response.json();
-                // Update the section data in the state
-                setData((prevData) =>
+            const { data, error } = await supabase
+                .from('courses')
+                .update({ content: setData((prevData) =>
                     prevData.map((section) =>
-                        section.id === sectionId ? updatedSection : section
+                        section.id === sectionId ? { ...section, ...updatedSectionData } : section
                     )
-                );
-                console.log(`Section ${sectionId} updated successfully.`);
+                ) })
+                .eq('id', courseId);
+
+            if (error) {
+                console.error('Failed to update section:', error.message);
             } else {
-                console.error('Failed to update section:', response.statusText);
+                console.log(`Section ${sectionId} updated successfully.`);
             }
         } catch (error) {
             console.error('Error updating section:', error);
