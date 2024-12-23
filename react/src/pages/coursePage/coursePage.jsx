@@ -139,7 +139,7 @@ const CoursePage = () => {
             className={`min-w-full bg-red-600 text-white text-center justify-center text-5xl min-h-16 flex`}
           >
             {data.name}{" "}
-            {role === "instructor" && (
+            {role === "professor" && (
               <AddButton
                 onClick={() => setOpenCreateSectionDialog(true)}
                 buttonFeature={"ml-1 mb-2.5 text-gray-300 hover:text-gray-400"}
