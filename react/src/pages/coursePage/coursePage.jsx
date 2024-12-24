@@ -30,7 +30,6 @@ const CoursePage = () => {
   const { deleteSection, addSection, editSection } = SectionModifyUtils({
     setData: setCourse,
   });
-  //end for entry deletion
 
   //for creating section
   const handleCreateSection = async (sectionData, courseID) => {
@@ -68,10 +67,8 @@ const CoursePage = () => {
   const handleConfirmRemoveSection = async (sectionID, courseID) => {
     console.log(`Removing section: ${sectionID}`);
     await deleteSection(sectionID, courseID);
-    // Perform the remove logic here (e.g., API call, state update)
     setDeleteSectionDialogOpen(false); // Close the dialog after confirming
   };
-  //end for deletion
 
   useEffect(() => {
     const fetchUserRoleAndCourse = async () => {
@@ -108,7 +105,7 @@ const CoursePage = () => {
             ? supabase.storage
                 .from(courseDetails.cover_image_bucket)
                 .getPublicUrl(courseDetails.cover_image_name).data.publicUrl
-            : "https://via.placeholder.com/300",
+            : "https://via.placeholder.com/500x300",
         };
 
         setCourse(course);

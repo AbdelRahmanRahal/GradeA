@@ -41,7 +41,7 @@ const Dashboard = () => {
           departments: course.departments,
           coverImageUrl: course.cover_image_name ? supabase.storage
             .from(course.cover_image_bucket)
-            .getPublicUrl(course.cover_image_name).data.publicUrl : "https://via.placeholder.com/300"
+            .getPublicUrl(course.cover_image_name).data.publicUrl : "https://via.placeholder.com/500x300"
         }));
 
         setCourses(coursesWithCovers);
@@ -62,7 +62,7 @@ const Dashboard = () => {
           {courses.length > 0 ? (
             <div className={`inline-flex gap-6 max-w-full`}>
               <div className="flex overflow-x-auto gap-6">
-                {courses.slice(0, 3).map((item) => (
+                {courses.slice(0, 4).map((item) => (
                   <CourseCard
                     key={item.id}
                     title={item.name}

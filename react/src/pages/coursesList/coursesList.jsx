@@ -120,7 +120,7 @@ const coursesList = () => {
             ? supabase.storage
                 .from(course.cover_image_bucket)
                 .getPublicUrl(course.cover_image_name).data.publicUrl
-            : "https://via.placeholder.com/300",
+            : "https://via.placeholder.com/500x300",
         }));
 
         setCourses(coursesWithCovers);
