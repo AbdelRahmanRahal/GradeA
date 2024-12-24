@@ -54,7 +54,7 @@ const Register = () => {
 
     if (role === "student") {
       metadata.department = selectedItems;
-    } else if (role === "instructor") {
+    } else if (role === "professor") {
       metadata.departments = selectedItems;
     }
 
@@ -301,11 +301,11 @@ const Register = () => {
               className="w-full bg-black hover:bg-gray-600 text-white py-2 rounded mt-4 text-xl flex"
               style={{padding: '15px 32px'}}
               onClick={() => {
-                setRole('instructor');
+                setRole('professor');
                 handleNext();
               }}
           >
-            Instructor
+            Professor
             <FaChalkboardTeacher className="text-xl ml-2" style={{height:'2rem', width:'2rem'}} />
           </button>
         </div>

@@ -191,7 +191,7 @@ const coursesList = () => {
         <div className="min-h-screen bg-gray-100">
             <main className="p-6">
                 <div className="bg-white shadow-md rounded p-4">
-                    <h3 className="flex text-xl font-bold mb-4">Your Courses {role === "instructor" && <AddButton onClick={() => setOpenCreateDialog(true)} />}</h3>
+                    <h3 className="flex text-xl font-bold mb-4">Your Courses {role === "professor" && <AddButton onClick={() => setOpenCreateDialog(true)} />}</h3>
                     <div className={`flex gap-6 max-h-full min-w-full`}>
                     <div className="flex-col gap-6 max-h-full min-w-full">
                         {data.length > 0 ? data.map((item) => (

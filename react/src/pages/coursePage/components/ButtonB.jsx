@@ -1,5 +1,5 @@
     import React, {useState} from 'react';
-    import { FaArrowRight, FaPlus, FaTrash, FaPenSquare, FaPlusCircle } from "react-icons/fa";
+    import { FaArrowRight, FaPlus, FaTrash, FaPenSquare, FaPlusCircle, FaBell } from "react-icons/fa";
     import {useNavigate} from "react-router-dom";
     import "../../../index.css"
 
@@ -62,5 +62,6 @@
             onClick={onClick}
         />
     );
+
 
     export { AccessButton, AddButton, EditButton, RemoveButton };

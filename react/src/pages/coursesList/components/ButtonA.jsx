@@ -1,5 +1,5 @@
     import React, {useState} from 'react';
-    import { FaArrowRight, FaPlus, FaTrash, FaPenSquare } from "react-icons/fa";
+    import {FaArrowRight, FaPlus, FaTrash, FaPenSquare, FaBell} from "react-icons/fa";
     import {useNavigate} from "react-router-dom";
     import "../../../index.css"
 
@@ -63,4 +63,13 @@
         />
     );
 
-    export { AccessButton, AddButton, EditButton, RemoveButton };
+    const BellButton = ({ courseID, onClick }) => (
+        <BaseButton
+            text={<FaBell/>}
+            className="text-gray-500 hover:text-black"
+            courseID={courseID}
+            onClick={onClick}
+        />
+    );
+
+    export { AccessButton, AddButton, EditButton, RemoveButton, BellButton };

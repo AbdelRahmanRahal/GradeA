@@ -87,7 +87,7 @@ const Section = ({
           <button onClick={toggleCollapse} className="text-2xl m-4 font-bold pl-2">
             {sectionData.title}
           </button>
-          {role === "instructor" && (
+          {role === "professor" && (
               <div className="flex flex-1 gap-2 items-center">
                 <EditButton onClick={onEdit} />
                 <RemoveButton onClick={onRemove} />

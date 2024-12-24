@@ -107,7 +107,7 @@ const Entry = ({ entryData, role, onEditEntry, onRemoveEntry }) => {
           {entryData.type === "assignment" && (
             <p className="ml-6">Due Date: {entryData.dueDate}</p>
           )}
-          {role === "instructor" && (
+          {role === "professor" && (
             <div className="flex gap-2 mt-3">
               <EditButton onClick={onEditEntry} />
               <RemoveButton onClick={onRemoveEntry} />
