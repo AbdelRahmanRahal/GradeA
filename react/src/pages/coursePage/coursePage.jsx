@@ -138,8 +138,8 @@ const CoursePage = () => {
         <main className="p-6 w-4/5">
           {course ? (
             <div className="flex flex-col gap-y-6">
-              {course?.sections?.length > 0 ? (
-                course.sections.map((section) => (
+              {course?.content?.length > 0 ? (
+                course.content.map((section) => (
                   <Section
                     key={section.id}
                     sectionData={section}
