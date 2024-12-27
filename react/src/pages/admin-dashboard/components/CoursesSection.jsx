@@ -59,7 +59,6 @@ const CoursesSection = () => {
       toast.error("Failed to delete course.");
     } else {
       toast.success("Course deleted.");
-      setSearch(search);
     }
   };
 
