@@ -4,9 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'react/**'
   pull_request:
     branches:
       - main
+    paths:
+      - 'react/**'
 
 jobs:
   build:
@@ -19,22 +23,48 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'  # Use your required Node.js version
+        node-version: '16'
+        cache: 'npm'
+        cache-dependency-path: './react/package-lock.json'
 
-    - name: Install dependencies
+    - name: Install root dependencies
+      run: npm install
+
+    - name: Install React dependencies
+      working-directory: ./react
       run: |
-        npm install
+        npm ci
+        sudo npm install -g vite@5.4.11
 
     - name: Run tests
-      run: |
-        npm test -- --coverage
+      working-directory: ./react
+      run: npm test
+      env:
+        CI: true
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      
+    - name: Upload test coverage
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results
+        path: react/coverage/
 
-    - name: Build the React app
-      run: |
-        npm run build
+    - name: Build React app
+      working-directory: ./react
+      run: npm run build
+      env:
+        CI: true
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
-    - name: Deploy React app (Optional for now)
-      run: |
-        # Add deployment script or command if required (e.g., for hosting on Netlify, Vercel)
-        echo "Deploy your React app here (optional)"
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-files
+        path: react/dist/
 
+    # - name: Deploy React app (Optional for now)
+    #   run: |
+    #     echo "Deploy your React app here (optional)"
