@@ -1,0 +1,72 @@
+name: React CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - mahmoud
+    paths:
+      - 'react/**'
+  pull_request:
+    branches:
+      - mahmoud
+    paths:
+      - 'react/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: './react/package-lock.json'
+
+    - name: Install root dependencies
+      run: npm install
+
+    - name: Install React dependencies
+      working-directory: ./react
+      run: |
+        npm ci
+        sudo npm install -g vite@5.4.11
+
+    - name: Run tests
+      working-directory: ./react
+      run: npm test
+      env:
+        CI: true
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      
+    - name: Upload test coverage
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results
+        path: react/coverage/
+
+    - name: Build React app
+      working-directory: ./react
+      run: npm run build
+      env:
+        CI: true
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-files
+        path: react/dist/
+
+    # Optional: Deploy step (uncomment when ready to deploy)
+    # - name: Deploy to production
+    #   if: github.ref == 'refs/heads/mahmoud'
+    #   run: |
+    #     # Add your deployment commands here
