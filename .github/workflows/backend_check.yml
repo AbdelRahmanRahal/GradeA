@@ -1,61 +1,72 @@
-name: Backend CI/CD
+name: React CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main  
+      - mahmoud
+    paths:
+      - 'react/**'
   pull_request:
     branches:
-      - main  
+      - mahmoud
+    paths:
+      - 'react/**'
 
 jobs:
-  test:
-    name: Run Tests
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: './react/package-lock.json'
 
-      - name: Install Dependencies
-        run: npm install
+    - name: Install root dependencies
+      run: npm install
 
-      - name: Run Tests
-        run: npm test
+    - name: Install React dependencies
+      working-directory: ./react
+      run: |
+        npm ci
+        sudo npm install -g vite@5.4.11
 
-  deploy:
-    name: Deploy to Supabase
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+    - name: Run tests
+      working-directory: ./react
+      run: npm test
+      env:
+        CI: true
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      
+    - name: Upload test coverage
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-results
+        path: react/coverage/
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+    - name: Build React app
+      working-directory: ./react
+      run: npm run build
+      env:
+        CI: true
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
-      - name: Install Dependencies
-        run: npm install
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-files
+        path: react/dist/
 
-      - name: Deploy to Supabase
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: |
-          # Install Supabase CLI
-          npm install -g supabase
-
-          # Log in to Supabase
-          supabase login --apikey $SUPABASE_KEY
-
-          # Deploy database migrations
-          supabase db push
-
-          # Deploy backend functions or APIs
-          supabase functions deploy
+    # Optional: Deploy step (uncomment when ready to deploy)
+    # - name: Deploy to production
+    #   if: github.ref == 'refs/heads/mahmoud'
+    #   run: |
+    #     # Add your deployment commands here
