@@ -1,0 +1,56 @@
+name: React CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'react/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'react/**'
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        cache: 'npm'
+        cache-dependency-path: './react/package-lock.json'
+
+    - name: Install dependencies
+      working-directory: ./react
+      run: |
+        npm ci
+        npm install -g vite@5.4.11
+
+    - name: Run tests
+      working-directory: ./react
+      run: npm test
+      env:
+        CI: true
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+    - name: Build
+      working-directory: ./react
+      run: npm run build
+      env:
+        CI: true
+        VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+        VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: react/dist
