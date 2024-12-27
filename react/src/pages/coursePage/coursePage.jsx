@@ -121,6 +121,7 @@ const CoursePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      <button onClick={() => console.log(course)}>Gift of Light</button>
       {course?.name && (
         <h1
           className={`min-w-full bg-red-600 text-white text-center justify-center text-5xl min-h-16 flex`}
@@ -150,6 +151,7 @@ const CoursePage = () => {
                       handleEditSectionDialog(section);
                     }}
                     onRemove={() => handleOpenDeleteSectionDialog(section)}
+                    setAllCourseData={setCourse}
                   ></Section>
                 ))
               ) : (

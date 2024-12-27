@@ -147,7 +147,7 @@ const EditEntryDialog = ({ open, onClose, entry, onEditEntry, courseID, sectionI
     }, [entry]);
 
     const handleEdit = () => {
-        const updatedEntryData = { type, title, content, description };
+        const updatedEntryData = { id:entryID, type, title, content, description };
         onEditEntry(entryID, updatedEntryData, courseID, sectionID);
         onClose(); // Close the dialog after editing
     };

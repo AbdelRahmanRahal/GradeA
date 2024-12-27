@@ -24,6 +24,7 @@ const Section = ({
   onEditEntry,
   onRemoveEntry,
   courseID,
+    setAllCourseData
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false); // State to control collapse/expand
 
@@ -44,7 +45,7 @@ const Section = ({
     setData: setData,
   });
   const { deleteEntry, addEntry, editEntry } = EntryModifyUtils({
-    setData: setData,
+    setData: setAllCourseData,
   });
 
   const handleCreateEntry = async (entryData, courseID, sectionID) => {
@@ -57,7 +58,10 @@ const Section = ({
 
   const handleEditEntry = async (entryID, entryData, courseID, sectionID) => {
     try {
+      console.log("initial" + entryID)
       await editEntry(entryID, entryData, courseID, sectionID);
+      // console.log(initialSectionData);
+      console.log(sectionData);
     } catch (error) {
       console.error("Error editing course:", error);
     }
@@ -68,13 +72,14 @@ const Section = ({
     setOpenEditEntryDialog(true);
   };
 
-  const handleOpenDeleteEntryDialog = (course) => {
-    setSelectedEntry(course);
+  const handleOpenDeleteEntryDialog = (entry) => {
+    setSelectedEntry(entry);
     setDeleteEntryDialogOpen(true);
   };
 
-  const handleConfirmRemoveEntry = async (entryID, courseID) => {
-    await deleteEntry(entryID, courseID);
+  const handleConfirmRemoveEntry = async (entryID, sectionID, courseID) => {
+    console.log("entry, section,course", entryID, "mawmaw",sectionID, "mawmaw", courseID)
+    await deleteEntry(entryID, sectionID, courseID);
     setDeleteEntryDialogOpen(false);
   };
 
@@ -94,28 +99,29 @@ const Section = ({
           {sectionData.title}
         </button>
         {role === "professor" && (
-          <div className="flex flex-1 gap-2 items-center">
-            <EditButton onClick={onEdit} />
-            <RemoveButton onClick={onRemove} />
-            <div className="ml-auto">
-              <button
-                className="text-gray-500 hover:text-black mr-4"
-                onClick={() => setOpenCreateEntryDialog(true)}
-              >
-                Add Entry
-              </button>
+            <div className="flex flex-1 gap-2 items-center">
+              <EditButton onClick={onEdit}/>
+              <RemoveButton onClick={onRemove}/>
+              <button onClick={() => console.log(sectionData)}>Bring Forth Gifts</button>
+              <div className="ml-auto">
+                <button
+                    className="text-gray-500 hover:text-black mr-4"
+                    onClick={() => setOpenCreateEntryDialog(true)}
+                >
+                  Add Entry
+                </button>
+              </div>
             </div>
-          </div>
         )}
       </div>
       <div
-        className={`transition-all duration-500 ${
-          isCollapsed
+          className={`transition-all duration-500 ${
+              isCollapsed
             ? "max-h-0 overflow-hidden"
             : "ml-2 max-h-screen overflow-hidden"
         }`}
       >
-        {sectionData.entries.length > 0 ? (
+        {sectionData.entries?.length > 0 ? (
           sectionData.entries.map((entry, index) => (
             <div
               key={index}
@@ -130,6 +136,20 @@ const Section = ({
                   onEditEntry={() => handleEditEntryDialog(entry)}
                 />
               </div>
+              {/*<button*/}
+              {/*    onClick={() =>*/}
+              {/*        setSectionData((prev) => ({*/}
+              {/*          ...prev,*/}
+              {/*          entries: prev.entries.map((entry, index) =>*/}
+              {/*              index === 0*/}
+              {/*                  ? { ...entry, title: "Yakuza Kiwami" } // Update the first entry's title*/}
+              {/*                  : entry*/}
+              {/*          ),*/}
+              {/*        }))*/}
+              {/*    }*/}
+              {/*>*/}
+              {/*  Bring FOrth Death.*/}
+              {/*</button>*/}
             </div>
           ))
         ) : (
@@ -150,11 +170,11 @@ const Section = ({
         open={openEditEntryDialog}
         onClose={() => {
           setOpenEditEntryDialog(false);
-          console.log("floating:" + selectedEditEntry?.index);
+          console.log("floating:" + selectedEditEntry?.id);
           }
         }
         entry={selectedEditEntry}
-        entryId={selectedEditEntry?.index}
+        entryID={selectedEditEntry?.id}
         onEditEntry={handleEditEntry}
         courseID={courseID}
         sectionID={sectionData?.id}
@@ -163,13 +183,13 @@ const Section = ({
         open={deleteEntryDialogOpen}
         onClose={() => setDeleteEntryDialogOpen(false)}
         title="Confirm Remove"
-        content={`Are you sure you want to remove the entry "${selectedEntry?.name}"?`}
+        content={`Are you sure you want to remove the entry "${selectedEntry?.title}"?`}
         actions={[
           { label: "Cancel", onClick: () => setDeleteEntryDialogOpen(false) },
           {
             label: "Remove",
             onClick: () =>
-              handleConfirmRemoveEntry(data?.id, selectedEntry?.id),
+              handleConfirmRemoveEntry(selectedEntry?.id, sectionData?.id, courseID),
             color: "error",
           },
         ]}
