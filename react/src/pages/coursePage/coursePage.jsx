@@ -142,6 +142,7 @@ const CoursePage = () => {
                 course.content.map((section) => (
                   <Section
                     key={section.id}
+                    courseID={course?.id}
                     sectionData={section}
                     role={role}
                     onEdit={() => {

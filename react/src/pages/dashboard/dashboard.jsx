@@ -7,7 +7,7 @@ import ViewAllButton from "./components/ViewAllButton.jsx";
 import {fetchRole} from "../../utils/CacheWorkings.jsx";
 
 const Dashboard = () => {
-  const [role, setRole] = useState(null); // 'student' or 'professor'
+  const [role, setRole] = useState(null); // 'student' or 'professor' or 'admin'
   const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
   const { setLoading } = useLoading();

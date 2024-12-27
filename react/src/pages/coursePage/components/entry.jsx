@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AccessButton,
   EditButton,
@@ -13,7 +13,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 
-const Entry = ({ entryData, role, onEditEntry, onRemoveEntry }) => {
+const Entry = ({ entryData, entryId, role, onEditEntry, onRemoveEntry }) => {
   const [isCollapsed, setIsCollapsed] = useState(true); // State to control collapse/expand
 
   const toggleCollapse = () => {
@@ -30,7 +30,7 @@ const Entry = ({ entryData, role, onEditEntry, onRemoveEntry }) => {
           </button>
           {/* Title based on entry type */}
           {entryData.type === "link" &&
-            entryData.url.includes("youtube.com") && (
+            entryData.content.includes("youtube.com") && (
               <button
                 onClick={toggleCollapse}
                 className="text-2xl font-bold h-12 mt-2 ml-5 flex"
@@ -40,7 +40,7 @@ const Entry = ({ entryData, role, onEditEntry, onRemoveEntry }) => {
               </button>
             )}
           {entryData.type === "link" &&
-            !entryData.url.includes("youtube.com") && (
+            !entryData.content.includes("youtube.com") && (
               <button
                 onClick={toggleCollapse}
                 className="text-2xl font-bold h-12 mt-2 ml-5 flex"
@@ -82,23 +82,23 @@ const Entry = ({ entryData, role, onEditEntry, onRemoveEntry }) => {
             </p>
           </div>
           {entryData.type === "link" &&
-            !entryData.url.includes("youtube.com") && (
+            !entryData.content.includes("youtube.com") && (
               <a
                 className="ml-8 text-blue-800 underline"
-                href={entryData.url}
+                href={entryData.content}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {entryData.url}
+                {entryData.content}
               </a>
             )}
           {entryData.type === "link" &&
-            entryData.url.includes("youtube.com") && (
+            entryData.content.includes("youtube.com") && (
               <iframe
                 className="ml-8 mb-6"
                 width="560"
                 height="315"
-                src={`https://www.youtube.com/embed/${getYouTubeVideoId(entryData.url)}`}
+                src={`https://www.youtube.com/embed/${getYouTubeVideoId(entryData.content)}`}
                 title={entryData.title}
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen

@@ -23,6 +23,7 @@ const Section = ({
   onAddEntry,
   onEditEntry,
   onRemoveEntry,
+  courseID,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false); // State to control collapse/expand
 
@@ -46,17 +47,17 @@ const Section = ({
     setData: setData,
   });
 
-  const handleCreateEntry = async (entryData, courseID) => {
+  const handleCreateEntry = async (entryData, courseID, sectionID) => {
     try {
-      await addEntry(entryData, courseID);
+      await addEntry(entryData, courseID, sectionID);
     } catch (error) {
       console.error("Error creating entry:", error);
     }
   };
 
-  const handleEditEntry = async (entryData, courseID) => {
+  const handleEditEntry = async (entryID, entryData, courseID, sectionID) => {
     try {
-      await editEntry(entryData.id, entryData, courseID);
+      await editEntry(entryID, entryData, courseID, sectionID);
     } catch (error) {
       console.error("Error editing course:", error);
     }
@@ -122,6 +123,7 @@ const Section = ({
             >
               <div className={`ml-3`}>
                 <Entry
+                  entryId={index}
                   entryData={entry}
                   role={role}
                   onRemoveEntry={() => handleOpenDeleteEntryDialog(entry)}
@@ -141,14 +143,21 @@ const Section = ({
         open={openCreateEntryDialog}
         onClose={() => setOpenCreateEntryDialog(false)}
         onCreateEntry={handleCreateEntry}
-        courseID={data?.id}
+        courseID={courseID}
+        sectionID={sectionData?.id}
       />
       <EditEntryDialog
         open={openEditEntryDialog}
-        onClose={() => setOpenEditEntryDialog(false)}
+        onClose={() => {
+          setOpenEditEntryDialog(false);
+          console.log("floating:" + selectedEditEntry?.index);
+          }
+        }
         entry={selectedEditEntry}
+        entryId={selectedEditEntry?.index}
         onEditEntry={handleEditEntry}
-        courseID={data?.id}
+        courseID={courseID}
+        sectionID={sectionData?.id}
       />
       <ResponsiveDialog
         open={deleteEntryDialogOpen}
