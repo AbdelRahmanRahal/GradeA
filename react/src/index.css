@@ -13,4 +13,24 @@
     .gradient-box:hover {
         background-position: left;
     }
+
+    /* Custom scrollbar styles */
+    .scrollbar-transparent::-webkit-scrollbar {
+        width: 12px; /* Adjust the width as needed */
+    }
+
+    .scrollbar-transparent::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .scrollbar-transparent::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.5); /* Adjust the thumb color as needed */
+        border-radius: 6px; /* Adjust the border-radius as needed */
+    }
+
+    .scrollbar-transparent {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
+        padding-right: 12px;
+    }
 }

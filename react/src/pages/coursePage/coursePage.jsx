@@ -60,8 +60,8 @@ const CoursePage = () => {
   //end of edit
 
   // for deletion
-  const handleOpenDeleteSectionDialog = (course) => {
-    setSelectedSection(course);
+  const handleOpenDeleteSectionDialog = (section) => {
+    setSelectedSection(section);
     setDeleteSectionDialogOpen(true); // Open the dialog
   };
 
@@ -161,6 +161,7 @@ const CoursePage = () => {
         </main>
         <div className={`w-1/5 ml-auto mt-6 mr-3`}>
           {role === "professor" && <ProfessorToolbar
+          courseID={data?.id}
           onAdd={() => setOpenCreateSectionDialog(true)}></ProfessorToolbar>}
           <DescriptionBox
           description={data?.description}></DescriptionBox>

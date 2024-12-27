@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../../logo/logo.svg";
 import { supabase } from "../supabase.js";
-import { signOutUser } from "../utils/SignOutUser.jsx";
+import SignOutUser, { signOutUser } from "../utils/SignOutUser.jsx";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchFirstName } from "../utils/CacheWorkings.jsx";
 import NotificationPanel from "./components/NotificationPanel.jsx";
+import { IconButton } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PersonIcon from '@mui/icons-material/Person';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -100,26 +105,43 @@ const Header = () => {
               {" "}
               Courses
             </button>
+            <NotificationPanel></NotificationPanel>
           </div>
 
           <div
-            className={`border border-amber-600 rounded ml-7 p-3 bg-gray-200 content-center justify-center flex-col`}
+            className={`border border-amber-600 rounded ml-7 p-1 bg-gray-200 content-center justify-center flex-col`}
           >
-            <p className="text-gray-600 leading-tight text-center flex">
-              Welcome back, {firstName}!
-              <div>
-                <NotificationPanel></NotificationPanel>
+            <div className="flex items-center justify-between ml-2">
+              <p className="text-gray-600 leading-tight text-center">
+                Welcome back, {firstName}!
+              </p>
+              <div className={`mt-1 flex`}>
+                <IconButton
+                    sx={{ fontSize: "30px"}}>
+                  <PersonIcon
+                  sx={{fontSize: "inherit"}}/>
+              </IconButton>
+                <IconButton
+                  aria-label="Logout"
+                  sx={{ color: "red"}}
+                  onClick={async (e) => {
+                    await signOutUser(e);
+                    navigate("/login");
+                  }}
+                >
+                  <LogoutIcon />
+                </IconButton>
               </div>
-            </p>
-            <button
-              className={`underline text-red-500 content-center text-center`}
-              onClick={async (e) => {
-                await signOutUser(e);
-                navigate("/login");
-              }}
-            >
-              Not you?
-            </button>
+            </div>
+            {/*<button*/}
+            {/*  className={`underline text-red-500 content-center text-center`}*/}
+            {/*  onClick={async (e) => {*/}
+            {/*    await signOutUser(e);*/}
+            {/*    navigate("/login");*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  Not you?*/}
+            {/*</button>*/}
           </div>
           {/*<button onClick={(event) => setNotificationsOpen(!notificationsOpen)}>*/}
           {/*  Notifications*/}

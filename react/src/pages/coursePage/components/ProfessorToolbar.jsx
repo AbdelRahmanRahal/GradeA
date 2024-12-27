@@ -5,8 +5,12 @@ import {
 } from "../../coursesList/components/ButtonA.jsx";
 import NotificationModifyUtils from "../utils/NotifModifyUtils";
 import { CreateNotificationDialog } from "../../../components/components/NotificationResponsiveDialog.jsx";
+import AddIcon from '@mui/icons-material/Add';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import {IconButton} from "@mui/material";
+import NotificationPanel from "../../../components/components/NotificationPanel.jsx";
 
-function ProfessorToolbar({ onAdd, onBell }) {
+function ProfessorToolbar({ onAdd, onBell, isInNotifDialog, courseID }) {
   const [data, setData] = useState([]);
   const [openCreateNotificationDialog, setOpenCreateNotificationDialog] =
     useState(false);
@@ -22,9 +26,8 @@ function ProfessorToolbar({ onAdd, onBell }) {
       );
   }, []);
 
-  const handleCreateNotification = async (notificationData) => {
+  const handleCreateNotification = async (notificationData, courseID) => { //This will have to be modified as well to work with the API, ROBINLOOKATME
     try {
-      console.log("DEFINITELY USING ADDCOURDAsaasfASDSE");
       await addNotification(notificationData);
     } catch (error) {
       console.error("Error creating course:", error);
@@ -36,16 +39,25 @@ function ProfessorToolbar({ onAdd, onBell }) {
       <div
         className={`flex container-xl lg:container m-auto min-w-full gap-6 rounded-lg border border-black shadow-md hover:bg-gray-100 overflow-hidden justify-center items-center`}
       >
-        <AddButton
-          onClick={onAdd}
-          buttonFeature={"ml-1 mb-2.5 text-gray-300 hover:text-gray-400"}
-        />
-        <BellButton onClick={() => setOpenCreateNotificationDialog(true)} />
+        {/*<AddButton*/}
+        {/*  onClick={onAdd}*/}
+        {/*  buttonFeature={"ml-1 mb-2.5 text-gray-300 hover:text-gray-400"}*/}
+        {/*/>*/}
+        {/*<BellButton onClick={() => setOpenCreateNotificationDialog(true)} />*/}
+        <IconButton
+        onClick={onAdd}>
+          <AddIcon />
+        </IconButton>
+          <NotificationPanel
+          isInCourse={true}
+          onAdd={() => setOpenCreateNotificationDialog(true)}
+          isInNotifDialog={openCreateNotificationDialog || isInNotifDialog}></NotificationPanel>
+
       </div>
       <CreateNotificationDialog
         open={openCreateNotificationDialog}
         onClose={() => setOpenCreateNotificationDialog(false)}
-        onCreateCourse={handleCreateNotification}
+        onCreateNotification={handleCreateNotification}
       />
     </div>
   );

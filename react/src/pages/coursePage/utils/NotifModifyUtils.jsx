@@ -1,6 +1,6 @@
 const NotificationModifyUtils = ({ setData }) => {
   // Function to delete a notification
-  const deleteNotification = async (notificationId, courseId) => {
+  const deleteNotification = async (notificationId, courseId) => { // change this and the add probably. ROBINLOOKATME
     try {
       const response = await fetch(`/api/notifications/${notificationId}`, {
         method: "DELETE",
