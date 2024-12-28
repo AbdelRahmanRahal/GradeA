@@ -1,0 +1,44 @@
+name: React Build and Test
+
+on:
+  push:
+    branches: [ "mahmoud" ]  
+  pull_request:
+    branches: [ "main", "development" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: './react/package-lock.json'
+        
+    - name: Install Dependencies
+      run: |
+        cd react
+        npm ci
+        
+    - name: Run Tests
+      run: |
+        cd react
+        npm test -- --watchAll=false --passWithNoTests
+      env:
+        CI: true
+        
+    - name: Build
+      run: |
+        cd react
+        npm run build
+      env:
+        CI: true 
