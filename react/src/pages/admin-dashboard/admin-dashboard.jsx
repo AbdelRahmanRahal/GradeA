@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import AdminSidebar from "./components/AdminSidebar";
 import StudentsSection from "./components/StudentsSection";
 import ProfessorsSection from "./components/ProfessorsSection";
@@ -6,10 +6,12 @@ import CoursesSection from "./components/CoursesSection";
 import { supabase } from "../../supabase";
 import { useNavigate } from "react-router-dom";
 import { useLoading } from '../../context/LoadingContext';
+import {fetchRole} from "../../utils/CacheWorkings.jsx";
 
 const AdminDashboardPage = () => {
   const navigate = useNavigate();
   const { setLoading } = useLoading();
+  const [role, setRole] = useState("student");
 
   useEffect(() => {
 
@@ -17,18 +19,11 @@ const AdminDashboardPage = () => {
       setLoading(true);
       
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) navigate("/login");
-        // Fetch the user's role from the profiles table
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", user.id)
-          .single();
-              
-        if (profileError) throw profileError;
+        const role = await fetchRole();
+        setRole(role);
+        if (!role) navigate("/login");
 
-        if (profile.role !== "admin") navigate("/dashboard");
+        if (role !== "admin") navigate("/dashboard");
       } catch (error) {
         console.error("Error fetching data:", error.message);
       } finally {
