@@ -1,10 +1,8 @@
 name: React Build and Test
 
 on:
-  push:
-    branches: [ "mahmoud" ]  
   pull_request:
-    branches: [ "main", "development" ]
+    branches: [ "main" ]
 
 jobs:
   build:
