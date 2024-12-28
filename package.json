@@ -11,7 +11,17 @@
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.0.1"
   },
-  "devDependencies": {
-    "json-server": "^1.0.0-beta.3"
-  }
+  "name": "gradea",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cd react && npm test",
+    "build": "cd react && npm run build",
+    "install-deps": "cd react && npm install"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

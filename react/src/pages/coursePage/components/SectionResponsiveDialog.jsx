@@ -37,7 +37,7 @@ const CreateSectionDialog = ({ open, onClose, onCreateSection, courseID }) => {
     // const [sectionDescription, setSectionDescription] = useState('');
 
     const handleCreate = () => {
-        const sectionData = { name: sectionName };
+        const sectionData = { title: sectionName };
         onCreateSection(sectionData, courseID); // Pass the section data to the parent component
         onClose(); // Close the dialog after creating the section
         setSectionName(''); // Reset the input fields

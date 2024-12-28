@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import CourseCard from "./components/CourseCard";
 import { useLoading } from '../../context/LoadingContext';
 import ViewAllButton from "./components/ViewAllButton.jsx";
+import {fetchRole} from "../../utils/CacheWorkings.jsx";
 
 const Dashboard = () => {
-  const [role, setRole] = useState(null); // 'student' or 'professor'
+  const [role, setRole] = useState(null); // 'student' or 'professor' or 'admin'
   const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
   const { setLoading } = useLoading();
@@ -17,20 +18,11 @@ const Dashboard = () => {
       setLoading(true);
       
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) navigate("/login");
-        // Fetch the user's role from the profiles table
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", user.id)
-          .single();
-          
-        if (profileError) throw profileError;
-        
-        setRole(profile.role);
+        const role = await fetchRole();
+        setRole(role);
+        if (!role) navigate("/login");
 
-        if (profile.role === "admin") navigate("/admin");
+        if (role === "admin") navigate("/admin");
         
         // Fetch full course details
         const { data: coursesDetails, error: coursesDetailsError } = await supabase
@@ -49,7 +41,7 @@ const Dashboard = () => {
           departments: course.departments,
           coverImageUrl: course.cover_image_name ? supabase.storage
             .from(course.cover_image_bucket)
-            .getPublicUrl(course.cover_image_name).data.publicUrl : "https://via.placeholder.com/300"
+            .getPublicUrl(course.cover_image_name).data.publicUrl : "https://via.placeholder.com/500x300"
         }));
 
         setCourses(coursesWithCovers);
@@ -70,7 +62,7 @@ const Dashboard = () => {
           {courses.length > 0 ? (
             <div className={`inline-flex gap-6 max-w-full`}>
               <div className="flex overflow-x-auto gap-6">
-                {courses.slice(0, 3).map((item) => (
+                {courses.slice(0, 4).map((item) => (
                   <CourseCard
                     key={item.id}
                     title={item.name}
