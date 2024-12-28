@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
+import { TextEncoder, TextDecoder } from 'util';
 
 // Cleanup after each test
 afterEach(() => {
@@ -42,3 +43,6 @@ jest.mock('react-toastify', () => ({
   },
   ToastContainer: () => null
 }));
+
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
