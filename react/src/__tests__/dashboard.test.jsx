@@ -3,12 +3,19 @@ import { render, screen, act, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { LoadingProvider } from '../context/LoadingContext';
 import Dashboard from '../pages/dashboard/dashboard';
+import { fetchRole } from '../utils/CacheWorkings.jsx';
 
-// Mock useNavigate
+// Mock navigation and fetchRole
 const mockNavigate = jest.fn();
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate
+}));
+
+jest.mock('../utils/CacheWorkings.jsx', () => ({
+  ...jest.requireActual('../utils/CacheWorkings.jsx'),
+  fetchRole: jest.fn()
 }));
 
 // Mock Supabase
@@ -85,29 +92,15 @@ describe('Dashboard Component Tests', () => {
   // TC_Dashboard_02: No Courses Message
   test('TC_Dashboard_02: Shows no courses message when empty', async () => {
     const supabase = jest.requireMock('@supabase/supabase-js').createClient();
-    
-    // Mock profiles query
-    supabase.from.mockImplementationOnce((table) => {
-      if (table === 'profiles') {
-        return {
-          select: jest.fn().mockReturnThis(),
-          eq: jest.fn().mockReturnThis(),
-          single: jest.fn().mockResolvedValue({
-            data: { role: 'student' },
-            error: null
-          })
-        };
-      }
-    });
+    fetchRole.mockResolvedValueOnce('student');
 
-    // Mock courses query with empty data
     supabase.from.mockImplementationOnce((table) => {
       if (table === 'courses_with_covers') {
         return {
           select: jest.fn().mockResolvedValue({
-            data: [],  // Empty courses array
-            error: null
-          })
+            data: [],
+            error: null,
+          }),
         };
       }
     });
@@ -127,19 +120,7 @@ describe('Dashboard Component Tests', () => {
 
   // TC_Dashboard_03: Admin Redirect
   test('TC_Dashboard_03: Redirects admin users', async () => {
-    const supabase = jest.requireMock('@supabase/supabase-js').createClient();
-    supabase.from.mockImplementationOnce((table) => {
-      if (table === 'profiles') {
-        return {
-          select: jest.fn().mockReturnThis(),
-          eq: jest.fn().mockReturnThis(),
-          single: jest.fn().mockResolvedValue({
-            data: { role: 'admin' },
-            error: null
-          })
-        };
-      }
-    });
+    fetchRole.mockResolvedValueOnce('admin');
 
     await act(async () => {
       render(
@@ -156,11 +137,7 @@ describe('Dashboard Component Tests', () => {
 
   // TC_Dashboard_04: Unauthorized Redirect
   test('TC_Dashboard_04: Redirects unauthorized users', async () => {
-    const supabase = jest.requireMock('@supabase/supabase-js').createClient();
-    supabase.auth.getUser.mockResolvedValueOnce({
-      data: { user: null },
-      error: null
-    });
+    fetchRole.mockResolvedValueOnce(null); // Simulate no role found
 
     await act(async () => {
       render(
