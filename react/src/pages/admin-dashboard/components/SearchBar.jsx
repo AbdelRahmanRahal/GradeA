@@ -1,18 +1,10 @@
 import React, { useState } from "react";
 
 const SearchBar = ({ setSearch }) => {
-  const [typingTimeout, setTypingTimeout] = useState(null);
+  const [tempSearch, setTempSearch] = useState("");
 
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-
-    if (typingTimeout) clearTimeout(typingTimeout); // Clear any existing timeout
-
-    const timeout = setTimeout(() => {
-      setSearch(value); // Update search only after debounce delay
-    }, 500); // 500ms debounce delay
-
-    setTypingTimeout(timeout);
+  const handleSearch = () => {
+    setSearch(tempSearch); // Trigger search only on button click
   };
 
   return (
@@ -20,9 +12,13 @@ const SearchBar = ({ setSearch }) => {
       <input
         type="text"
         placeholder="Search..."
-        onChange={handleSearchChange} // Debounced search handler
+        value={tempSearch}
+        onChange={(e) => setTempSearch(e.target.value)}
         className="border p-2 flex-grow"
       />
+      <button onClick={handleSearch} className="bg-blue-500 text-white px-4 py-2 ml-2">
+        Search
+      </button>
     </div>
   );
 };

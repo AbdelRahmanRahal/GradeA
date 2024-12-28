@@ -11,7 +11,7 @@ const CourseCard = ({title, image, courseID}) => {
                     <img
                         src={image}
                         alt={title}
-                        className="w-full h-48 object-fill aspect-card rounded-md "
+                        className="w-full h-48 object-cover rounded-md "
                     />
                 )}
                 <div className={`p-6 rounded-lg shadow-md`}>

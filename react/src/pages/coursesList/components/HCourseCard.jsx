@@ -10,7 +10,7 @@ const HCourseCard = ({title, description, image, role, courseID, onRemove, onEdi
                     <img
                         src={image}
                         alt={title}
-                        className="object-fill h-48 aspect-card"
+                        className="h-48 object-cover"
                     />
                 )}
                 <div>

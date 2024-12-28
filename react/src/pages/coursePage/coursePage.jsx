@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLoading } from "../../context/LoadingContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { fetchRole } from "../../utils/CacheWorkings.jsx";
 import SectionModifyUtils from "./utils/SectionModifyUtils.jsx";
 import Section from "./components/section.jsx";
@@ -10,11 +10,9 @@ import {
   EditSectionDialog,
   SectionResponsiveDialog,
 } from "./components/SectionResponsiveDialog.jsx";
-import DescriptionBox from "./components/DescriptionBox.jsx";
 import { supabase } from "../../supabase.js";
 
 const CoursePage = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
   const { setLoading } = useLoading();
   const [role, setRole] = useState("student");
@@ -30,6 +28,7 @@ const CoursePage = () => {
   const { deleteSection, addSection, editSection } = SectionModifyUtils({
     setData: setCourse,
   });
+  //end for entry deletion
 
   //for creating section
   const handleCreateSection = async (sectionData, courseID) => {
@@ -67,30 +66,41 @@ const CoursePage = () => {
   const handleConfirmRemoveSection = async (sectionID, courseID) => {
     console.log(`Removing section: ${sectionID}`);
     await deleteSection(sectionID, courseID);
+    // Perform the remove logic here (e.g., API call, state update)
     setDeleteSectionDialogOpen(false); // Close the dialog after confirming
   };
+  //end for deletion
 
   useEffect(() => {
     const fetchUserRoleAndCourse = async () => {
       setLoading(true);
 
       try {
-        const role = await fetchRole();
-        setRole(role);
-        if (!role) navigate("/login");
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) navigate("/login");
+        // Fetch the user's role from the profiles table
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .single();
 
-        if (role === "admin") navigate("/admin");
+        if (profileError) throw profileError;
+
+        setRole(profile.role);
+
+        if (profile.role === "admin") navigate("/admin");
 
         // Fetch full course details
-        const { data: coursesDetails, error: coursesDetailsError } =
+        const { data: courseDetails, error: courseDetailsError } =
           await supabase
             .from("courses_with_covers")
             .select("*")
             .eq("course_id", id);
 
-        if (coursesDetailsError) throw coursesDetailsError;
-
-        const courseDetails = coursesDetails[0];
+        if (courseDetailsError) throw courseDetailsError;
 
         // Fetch public URL for cover image
         const course = {
@@ -105,7 +115,7 @@ const CoursePage = () => {
             ? supabase.storage
                 .from(courseDetails.cover_image_bucket)
                 .getPublicUrl(courseDetails.cover_image_name).data.publicUrl
-            : "https://via.placeholder.com/500x300",
+            : "https://via.placeholder.com/300",
         };
 
         setCourse(course);
@@ -134,37 +144,30 @@ const CoursePage = () => {
           )}
         </h1>
       )}
-      <div className={`flex`}>
-        <main className="p-6 w-4/5">
-          {course ? (
-            <div className="flex flex-col gap-y-6">
-              {course?.content?.length > 0 ? (
-                course.content.map((section) => (
-                  <Section
-                    key={section.id}
-                    courseID={course?.id}
-                    sectionData={section}
-                    role={role}
-                    onEdit={() => {
-                      console.log("jermisadasde" + course?.id);
-                      handleEditSectionDialog(section);
-                    }}
-                    onRemove={() => handleOpenDeleteSectionDialog(section)}
-                    setAllCourseData={setCourse}
-                  ></Section>
-                ))
-              ) : (
-                <h2>No entries available, issue is in coursePage.</h2>
-              )}
-            </div>
-          ) : (
-            <h2>No data found.</h2>
-          )}
-        </main>
-        <div className={`w-1/5 ml-auto mt-6 mr-3`}>
-          <DescriptionBox></DescriptionBox>
-        </div>
-      </div>
+      <main className="p-6">
+        {course ? (
+          <div className="flex flex-col gap-y-6">
+            {course?.content?.length > 0 ? (
+              course.content.map((section) => (
+                <Section
+                  key={section.id}
+                  sectionData={section}
+                  role={role}
+                  onEdit={() => {
+                    console.log("jermisadasde" + course?.id);
+                    handleEditSectionDialog(section);
+                  }}
+                  onRemove={() => handleOpenDeleteSectionDialog(section)}
+                ></Section>
+              ))
+            ) : (
+              <h2>No entries available, issue is in coursePage.</h2>
+            )}
+          </div>
+        ) : (
+          <h2>No data found.</h2>
+        )}
+      </main>
       <CreateSectionDialog
         open={openCreateSectionDialog}
         onClose={() => setOpenCreateSectionDialog(false)}
@@ -184,10 +187,7 @@ const CoursePage = () => {
         title="Confirm Remove"
         content={`Are you sure you want to remove the section "${selectedSection?.name}"?`}
         actions={[
-          {
-            label: "Cancel",
-            onClick: () => setDeleteSectionDialogOpen(false),
-          },
+          { label: "Cancel", onClick: () => setDeleteSectionDialogOpen(false) },
           {
             label: "Remove",
             onClick: () =>

@@ -37,16 +37,16 @@ const EntryResponsiveDialog = ({ open, onClose, title, content, actions }) => {
 
 // Create Entry Dialog Component
 const CreateEntryDialog = ({ open, onClose, onCreateEntry, courseID, sectionID }) => {
-    const [type, setType] = useState('');
+    const [category, setCategory] = useState('');
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [description, setDescription] = useState('');
 
     const handleCreate = () => {
-        const entryData = { type, title, content, description };
+        const entryData = { category, title, content, description };
         onCreateEntry(entryData, courseID, sectionID); // Pass the entry data to the parent component
         onClose(); // Close the dialog after creating the entry
-        setType('');
+        setCategory('');
         setTitle('');
         setContent('');
         setDescription('');
@@ -57,11 +57,11 @@ const CreateEntryDialog = ({ open, onClose, onCreateEntry, courseID, sectionID }
             <DialogTitle>Create New Entry</DialogTitle>
             <DialogContent>
                 <FormControl fullWidth margin="normal">
-                    <InputLabel>Type</InputLabel>
+                    <InputLabel>Category</InputLabel>
                     <Select
-                        value={type}
-                        onChange={(e) => setType(e.target.value)}
-                        label="Type"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        label="Category"
                         required
                     >
                         <MenuItem value="text">Text</MenuItem>
@@ -80,7 +80,7 @@ const CreateEntryDialog = ({ open, onClose, onCreateEntry, courseID, sectionID }
                     required
                 />
 
-                {type === 'text' ? (
+                {category === 'text' ? (
                     <TextField
                         label="Content"
                         fullWidth
@@ -104,7 +104,7 @@ const CreateEntryDialog = ({ open, onClose, onCreateEntry, courseID, sectionID }
                             multiline
                             rows={4}
                         />
-                        {type === 'link' && (
+                        {category === 'link' && (
                             <TextField
                                 label="URL"
                                 fullWidth
@@ -131,15 +131,15 @@ const CreateEntryDialog = ({ open, onClose, onCreateEntry, courseID, sectionID }
 };
 
 // Edit Entry Dialog Component
-const EditEntryDialog = ({ open, onClose, entry, onEditEntry, courseID, sectionID, entryID }) => {
-    const [type, setType] = useState('');
+const EditEntryDialog = ({ open, onClose, entry, onEditEntry, courseID, sectionID }) => {
+    const [category, setCategory] = useState('');
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [description, setDescription] = useState('');
 
     useEffect(() => {
         if (entry) {
-            setType(entry.type || '');
+            setCategory(entry.category || '');
             setTitle(entry.title || '');
             setContent(entry.content || '');
             setDescription(entry.description || '');
@@ -147,8 +147,8 @@ const EditEntryDialog = ({ open, onClose, entry, onEditEntry, courseID, sectionI
     }, [entry]);
 
     const handleEdit = () => {
-        const updatedEntryData = { id:entryID, type, title, content, description };
-        onEditEntry(entryID, updatedEntryData, courseID, sectionID);
+        const updatedEntryData = { id: entry.id, category, title, content, description };
+        onEditEntry(updatedEntryData, courseID, sectionID);
         onClose(); // Close the dialog after editing
     };
 
@@ -157,11 +157,11 @@ const EditEntryDialog = ({ open, onClose, entry, onEditEntry, courseID, sectionI
             <DialogTitle>Edit Entry</DialogTitle>
             <DialogContent>
                 <FormControl fullWidth margin="normal">
-                    <InputLabel>Type</InputLabel>
+                    <InputLabel>Category</InputLabel>
                     <Select
-                        value={type}
-                        onChange={(e) => setType(e.target.value)}
-                        label="Type"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        label="Category"
                         required
                     >
                         <MenuItem value="text">Text</MenuItem>
@@ -180,7 +180,7 @@ const EditEntryDialog = ({ open, onClose, entry, onEditEntry, courseID, sectionI
                     required
                 />
 
-                {type === 'text' ? (
+                {category === 'text' ? (
                     <TextField
                         label="Content"
                         fullWidth
@@ -204,7 +204,7 @@ const EditEntryDialog = ({ open, onClose, entry, onEditEntry, courseID, sectionI
                             multiline
                             rows={4}
                         />
-                        {type === 'link' && (
+                        {category === 'link' && (
                             <TextField
                                 label="URL"
                                 fullWidth

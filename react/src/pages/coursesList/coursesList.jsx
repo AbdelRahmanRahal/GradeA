@@ -31,15 +31,18 @@ const coursesList = () => {
     setData: setCourses,
   });
 
+  //for creation
   const handleCreateCourse = async (courseData) => {
     try {
-      console.log("DEFINITELY USING ADDCssssssaasfASDSE");
+      console.log("DEFINITELY USING ADDCOURDAsaasfASDSE");
       await addCourse(courseData);
     } catch (error) {
       console.error("Error creating course:", error);
     }
   };
+  //end of creation
 
+  //for edit
   const handleEditCourse = async (courseData) => {
     try {
       console.log("the id should be" + courseData?.id);
@@ -53,7 +56,9 @@ const coursesList = () => {
     setSelectedEditCourse(course);
     setOpenEditDialog(true);
   };
+  //end of edit
 
+  // for deletion
   const handleOpenDialog = (course) => {
     setSelectedCourse(course);
     setDialogOpen(true); // Open the dialog
@@ -69,6 +74,7 @@ const coursesList = () => {
     // Perform the remove logic here (e.g., API call, state update)
     handleCloseDialog(); // Close the dialog after confirming
   };
+  //end for deletion
 
   const truncateDescription = (description, maxLength) => {
     if (description.length <= maxLength) {
@@ -88,19 +94,22 @@ const coursesList = () => {
       setLoading(true);
 
       try {
-        const role = await fetchRole();
-        setRole(role);
-        if (!role) navigate("/login");
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) navigate("/login");
         // Fetch the user's role from the profiles table
-        // const { data: profile, error: profileError } = await supabase
-        //   .from("profiles")
-        //   .select("role")
-        //   .eq("id", user.id)
-        //   .single();
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .single();
 
-        // if (profileError) throw profileError;
+        if (profileError) throw profileError;
 
-        if (role === "admin") navigate("/admin");
+        setRole(profile.role);
+
+        if (profile.role === "admin") navigate("/admin");
 
         // Fetch full course details
         const { data: coursesDetails, error: coursesDetailsError } =
@@ -120,7 +129,7 @@ const coursesList = () => {
             ? supabase.storage
                 .from(course.cover_image_bucket)
                 .getPublicUrl(course.cover_image_name).data.publicUrl
-            : "https://via.placeholder.com/500x300",
+            : "https://via.placeholder.com/300",
         }));
 
         setCourses(coursesWithCovers);
