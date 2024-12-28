@@ -13,4 +13,8 @@
     .gradient-box:hover {
         background-position: left;
     }
+
+    .aspect-card{
+        aspect-ratio: 5/3;
+    }
 }
