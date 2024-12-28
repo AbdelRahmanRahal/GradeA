@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Entry from './Entry';
+import Entry from './entry';
 import { AccessButton, EditButton, RemoveButton } from "../../coursesList/components/ButtonA.jsx";
 import { AddButton } from "./ButtonB.jsx";
 import { CreateEntryDialog, EditEntryDialog } from "./EntryResponsiveDialog.jsx";
