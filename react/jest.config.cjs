@@ -1,21 +1,16 @@
 module.exports = {
   testEnvironment: 'jsdom',
-  roots: ['<rootDir>/src'],
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/__mocks__/fileMock.js',
-    '^react-toastify/dist/ReactToastify.css$': 'identity-obj-proxy'
+    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
+      '<rootDir>/src/__mocks__/fileMock.js'
   },
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
+  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
-    '^.+\\.(js|jsx)$': 'babel-jest'
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest'
   },
-  testMatch: [
-    '<rootDir>/src/**/__tests__/**/*.{js,jsx}',
-    '<rootDir>/src/**/*.{spec,test}.{js,jsx}'
-  ],
-  moduleFileExtensions: ['js', 'jsx', 'json', 'node'],
   testEnvironmentOptions: {
-    url: 'http://localhost'
+    customExportConditions: ['node', 'node-addons']
   }
 }; 
