@@ -1,3 +1,4 @@
+
 """
 Django settings for elearning_platform project.
 
