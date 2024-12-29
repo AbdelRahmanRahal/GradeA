@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLoading } from "../../context/LoadingContext";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchRole } from "../../utils/CacheWorkings.jsx";
 import SectionModifyUtils from "./utils/SectionModifyUtils.jsx";
 import Section from "./components/section.jsx";
-import { AddButton } from "./components/buttonB.jsx";
+import { AddButton } from "./components/ButtonB.jsx";
 import {
   CreateSectionDialog,
   EditSectionDialog,

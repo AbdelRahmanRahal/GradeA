@@ -145,7 +145,8 @@ const Entry = ({ entryData, entryId, role, onEditEntry, onRemoveEntry }) => {
                 </div>
               )}
             </div>
-          </div>
+          )}
+        </div>
         </div>
         <UploadAssignmentDialog
           open={openUploadDialog}
