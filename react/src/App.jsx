@@ -8,6 +8,7 @@ import Footer from './components/Footer.jsx';
 import LoginPage from './pages/login/login.jsx';
 import RegisterPage from './pages/register/register.jsx';
 import DashboardPage from './pages/dashboard/dashboard.jsx';
+import AdminDashboardPage from './pages/admin-dashboard/admin-dashboard.jsx';
 import CoursesPage from './pages/coursesList/coursesList.jsx';
 import Loading from './components/Loading';
 import CoursePage from "./pages/coursePage/coursePage.jsx";
@@ -56,6 +57,17 @@ function AppContent() {
                                 <Header/>
                                 <CoursePage/>
                                 <Footer/>
+                            </>
+                        }
+                    />
+                    {/* Admin dashboard */}
+                    <Route
+                        path="/admin"
+                        element={
+                            <>
+                                <Header />
+                                <AdminDashboardPage />
+                                <Footer />
                             </>
                         }
                     />

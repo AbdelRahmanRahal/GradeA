@@ -12,13 +12,15 @@ import {
 } from "./components/SectionResponsiveDialog.jsx";
 import DescriptionBox from "./components/DescriptionBox.jsx";
 import ProfessorToolbar from "./components/ProfessorToolbar.jsx";
+import { supabase } from "../../supabase.js";
 
 const CoursePage = () => {
+  const [showTitle, setShowTitle] = useState(false); // for the title
+  const navigate = useNavigate();
   const { id } = useParams();
   const { setLoading } = useLoading();
   const [role, setRole] = useState("student");
-  const [data, setData] = useState(null);
-  const [showTitle, setShowTitle] = useState(false); // for the title
+  const [course, setCourse] = useState(null);
 
   const [deleteSectionDialogOpen, setDeleteSectionDialogOpen] = useState(false);
   const [openCreateSectionDialog, setOpenCreateSectionDialog] = useState(false);
@@ -28,9 +30,8 @@ const CoursePage = () => {
   const [selectedEditSection, setSelectedEditSection] = useState(null);
 
   const { deleteSection, addSection, editSection } = SectionModifyUtils({
-    setData: setData,
+    setData: setCourse,
   });
-  //end for entry deletion
 
   //for creating section
   const handleCreateSection = async (sectionData, courseID) => {
@@ -68,47 +69,66 @@ const CoursePage = () => {
   const handleConfirmRemoveSection = async (sectionID, courseID) => {
     console.log(`Removing section: ${sectionID}`);
     await deleteSection(sectionID, courseID);
-    // Perform the remove logic here (e.g., API call, state update)
     setDeleteSectionDialogOpen(false); // Close the dialog after confirming
   };
-  //end for deletion
 
   useEffect(() => {
-    const getRole = async () => {
-      const role = await fetchRole();
-      setRole(role);
-    };
-    getRole();
-
-    const fetchCourseData = async () => {
+    const fetchUserRoleAndCourse = async () => {
       setLoading(true);
 
       try {
-        const response = await fetch(`/api/course/${id}`);
-        if (response.ok) {
-          const courseData = await response.json();
-          setData(courseData); // Set course data
-        } else {
-          console.error("Failed to fetch course data");
-        }
+        const role = await fetchRole();
+        setRole(role);
+        if (!role) navigate("/login");
+
+        if (role === "admin") navigate("/admin");
+
+        // Fetch full course details
+        const { data: coursesDetails, error: coursesDetailsError } =
+          await supabase
+            .from("courses_with_covers")
+            .select("*")
+            .eq("course_id", id);
+
+        if (coursesDetailsError) throw coursesDetailsError;
+
+        const courseDetails = coursesDetails[0];
+
+        // Fetch public URL for cover image
+        const course = {
+          id: courseDetails.course_id,
+          name: courseDetails.course_name,
+          description: courseDetails.description,
+          startDate: courseDetails.start_date,
+          endDate: courseDetails.end_date,
+          departments: courseDetails.departments,
+          content: courseDetails.content,
+          coverImageUrl: courseDetails.cover_image_name
+            ? supabase.storage
+                .from(courseDetails.cover_image_bucket)
+                .getPublicUrl(courseDetails.cover_image_name).data.publicUrl
+            : "https://via.placeholder.com/500x300",
+        };
+
+        setCourse(course);
       } catch (error) {
-        console.error("Error fetching courses:", error);
+        console.error("Error fetching data:", error.message);
       } finally {
-        setLoading(false); // Ensure loading state is stopped after fetching
+        setLoading(false);
       }
     };
 
-    fetchCourseData(); // Call the async function to fetch data
+    fetchUserRoleAndCourse();
   }, [id, setLoading]);
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {data?.image && (
+      {course?.image && (
         <div className={`relative min-w-screen`}>
           <div className="absolute inset-0 bg-black"></div>
           <img
-            src={data?.image}
-            alt={data?.name}
+            src={course?.image}
+            alt={course?.name}
             className={`w-full h-80 drop-shadow object-cover min-w-full transition hover:opacity-40 hover:shadow shadow-xl duration-300`}
             onMouseEnter={() => setShowTitle(true)}
             onMouseLeave={() => setShowTitle(false)}
@@ -117,15 +137,15 @@ const CoursePage = () => {
             className={`pointer-events-none absolute inset-0 flex items-center justify-center font-bold bg-opacity-50 top-0 text-center text-7xl text-white transition duration-300
             ${!showTitle && "opacity-0"}`}
           >
-            {data.name}
+            {course?.name}
           </h2>
         </div>
       )}
-      {/*{data?.name && (*/}
+      {/*{course?.name && (*/}
       {/*  <h1*/}
       {/*    className={`min-w-full bg-red-600 text-white text-center justify-center text-5xl min-h-16 flex`}*/}
       {/*  >*/}
-      {/*    {data.name}{" "}*/}
+      {/*    {course.name}{" "}*/}
       {/*    {role === "professor" && (*/}
       {/*      <AddButton*/}
       {/*        onClick={() => setOpenCreateSectionDialog(true)}*/}
@@ -136,23 +156,25 @@ const CoursePage = () => {
       {/*)}*/}
       <div className={`flex`}>
         <main className="p-6 w-4/5">
-          {data ? (
+           {course ? (
             <div className="flex flex-col gap-y-6">
-              {data?.sections?.length > 0 ? (
-                data.sections.map((section) => (
+              {course?.content?.length > 0 ? (
+                course.content.map((section) => (
                   <Section
                     key={section.id}
+                    courseID={course?.id}
                     sectionData={section}
                     role={role}
                     onEdit={() => {
-                      console.log("jermisadasde" + data?.id);
+                      console.log("jermisadasde" + course?.id);
                       handleEditSectionDialog(section);
                     }}
                     onRemove={() => handleOpenDeleteSectionDialog(section)}
+                    setAllCourseData={setCourse}
                   ></Section>
                 ))
               ) : (
-                <h2>No entries available, issue is in coursePage.</h2>
+                <h2>No entries available.</h2>
               )}
             </div>
           ) : (
@@ -161,24 +183,24 @@ const CoursePage = () => {
         </main>
         <div className={`w-1/5 ml-auto mt-6 mr-3`}>
           {role === "professor" && <ProfessorToolbar
-          courseID={data?.id}
+          courseID={course?.id}
           onAdd={() => setOpenCreateSectionDialog(true)}></ProfessorToolbar>}
           <DescriptionBox
-          description={data?.description}></DescriptionBox>
+          description={course?.description}></DescriptionBox>
         </div>
       </div>
       <CreateSectionDialog
         open={openCreateSectionDialog}
         onClose={() => setOpenCreateSectionDialog(false)}
         onCreateSection={handleCreateSection}
-        courseID={data?.id}
+        courseID={course?.id}
       />
       <EditSectionDialog // const EditSectionDialog = ({ open, onClose, section, onEditSection }) =>
         open={openEditSectionDialog}
         onClose={() => setOpenEditSectionDialog(false)}
         section={selectedEditSection}
         onEditSection={handleEditSection}
-        courseID={data?.id}
+        courseID={course?.id}
       />
       <SectionResponsiveDialog
         open={deleteSectionDialogOpen}
@@ -193,7 +215,7 @@ const CoursePage = () => {
           {
             label: "Remove",
             onClick: () =>
-              handleConfirmRemoveSection(data?.id, selectedSection?.id),
+              handleConfirmRemoveSection(course?.id, selectedSection?.id),
             color: "error",
           },
         ]}

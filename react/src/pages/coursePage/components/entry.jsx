@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AccessButton,
   EditButton,
@@ -16,7 +16,7 @@ import {
 } from "react-icons/fa";
 import UploadAssignmentDialog from "./UploadAssignmentDialog.jsx";
 
-const Entry = ({ entryData, role, onEditEntry, onRemoveEntry }) => {
+const Entry = ({ entryData, entryId, role, onEditEntry, onRemoveEntry }) => {
   const [isCollapsed, setIsCollapsed] = useState(true); // State to control collapse/expand
   const [openUploadDialog, setUploadDialog] =
       useState(false);
@@ -45,7 +45,7 @@ const Entry = ({ entryData, role, onEditEntry, onRemoveEntry }) => {
           </button>
           {/* Title based on entry type */}
           {entryData.type === "link" &&
-            entryData.url.includes("youtube.com") && (
+            entryData.content.includes("youtube.com") && (
               <button
                 onClick={toggleCollapse}
                 className="text-2xl font-bold h-12 mt-2 ml-5 flex"
@@ -55,7 +55,7 @@ const Entry = ({ entryData, role, onEditEntry, onRemoveEntry }) => {
               </button>
             )}
           {entryData.type === "link" &&
-            !entryData.url.includes("youtube.com") && (
+            !entryData.content.includes("youtube.com") && (
               <button
                 onClick={toggleCollapse}
                 className="text-2xl font-bold h-12 mt-2 ml-5 flex"
@@ -103,39 +103,40 @@ const Entry = ({ entryData, role, onEditEntry, onRemoveEntry }) => {
           className={`transition-all duration-500 ${isCollapsed ? "max-h-0 overflow-hidden" : "ml-2 max-h-screen overflow-hidden"}`}
         >
           <div className="border border-transparent border-l-gray-600 border-l-2">
-            <div>
-              <p className="mt-2 ml-6 min-h-12">
-                {entryData.type === "text"
-                  ? entryData.content
-                  : entryData.description}
-              </p>
-            </div>
-            {entryData.type === "link" &&
-              !entryData.url.includes("youtube.com") && (
-                <a
-                  className="ml-8 text-blue-800 underline"
-                  href={entryData.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {entryData.url}
-                </a>
-              )}
-            {entryData.type === "link" &&
-              entryData.url.includes("youtube.com") && (
-                <iframe
-                  className="ml-8 mb-6"
-                  width="560"
-                  height="315"
-                  src={`https://www.youtube.com/embed/${getYouTubeVideoId(entryData.url)}`}
-                  title={entryData.title}
-                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              )}
-            {entryData.type === "assignment" && (
-              <p className="ml-6">Due Date: {entryData.dueDate}</p>
+          <div>
+            <p className="mt-2 ml-6 min-h-12">
+              {entryData.type === "text"
+                ? entryData.content
+                : entryData.description}
+            </p>
+          </div>
+          {entryData.type === "link" &&
+            !entryData.content.includes("youtube.com") && (
+              <a
+                className="ml-8 text-blue-800 underline"
+                href={entryData.content}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {entryData.content}
+              </a>
             )}
+          {entryData.type === "link" &&
+            entryData.content.includes("youtube.com") && (
+              <iframe
+                className="ml-8 mb-6"
+                width="560"
+                height="315"
+                src={`https://www.youtube.com/embed/${getYouTubeVideoId(entryData.content)}`}
+                title={entryData.title}
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            )}
+          {entryData.type === "assignment" && (
+            <p className="ml-6">Due Date: {entryData.dueDate}</p>
+          )}
+          {role === "professor" && (
             <div className="flex gap-2 mt-3">
               {role === "professor" && (
                 <div>

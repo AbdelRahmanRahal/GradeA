@@ -30,13 +30,55 @@ const Register = () => {
 
   // only to use dummy-base for the departments, for the mean time
   useEffect(() => {
-    // Fetch departments data from API
-    fetch('/api/fields')
-        .then((response) => response.json())
-        .then((data) => setItems(data))
-        .catch((error) => console.error('Error fetching fields:', error));
+    const data = [
+    {
+      "id": "1",
+      "name": "Computer Science",
+      "abbreviation": "CS"
+    },
+    {
+      "id": "2",
+      "name": "Biomedical",
+      "abbreviation": "BM"
+    },
+    {
+      "id": "3",
+      "name": "Mathematics",
+      "abbreviation": "MATH"
+    },
+    {
+      "id": "4",
+      "name": "Physics",
+      "abbreviation": "PHYS"
+    },
+    {
+      "id": "5",
+      "name": "Chemistry",
+      "abbreviation": "CHEM"
+    },
+    {
+      "id": "6",
+      "name": "Philosophy",
+      "abbreviation": "PHIL"
+    },
+    {
+      "id": "7",
+      "name": "Psychology",
+      "abbreviation": "PSY"
+    },
+    {
+      "id": "8",
+      "name": "Engineering",
+      "abbreviation": "ENG"
+    },
+    {
+      "id": "9",
+      "name": "Economics",
+      "abbreviation": "ECO"
+    }
+  ];
+    setItems(data);
   }, []);
-  // end of dummy-base api integration
 
   const handleSignUp = async (e) => {
     e.preventDefault();
