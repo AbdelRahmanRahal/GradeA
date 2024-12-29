@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useLoading } from "../../context/LoadingContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { fetchRole } from "../../utils/CacheWorkings.jsx";
 import SectionModifyUtils from "./utils/SectionModifyUtils.jsx";
 import Section from "./components/section.jsx";
-import { AddButton } from "./components/ButtonB.jsx";
+import { AddButton } from "./components/buttonB.jsx";
 import {
   CreateSectionDialog,
   EditSectionDialog,
   SectionResponsiveDialog,
 } from "./components/SectionResponsiveDialog.jsx";
 import DescriptionBox from "./components/DescriptionBox.jsx";
+import ProfessorToolbar from "./components/ProfessorToolbar.jsx";
 import { supabase } from "../../supabase.js";
 
 const CoursePage = () => {
+  const [showTitle, setShowTitle] = useState(false); // for the title
   const navigate = useNavigate();
   const { id } = useParams();
   const { setLoading } = useLoading();
@@ -59,8 +61,8 @@ const CoursePage = () => {
   //end of edit
 
   // for deletion
-  const handleOpenDeleteSectionDialog = (course) => {
-    setSelectedSection(course);
+  const handleOpenDeleteSectionDialog = (section) => {
+    setSelectedSection(section);
     setDeleteSectionDialogOpen(true); // Open the dialog
   };
 
@@ -121,22 +123,40 @@ const CoursePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {course?.name && (
-        <h1
-          className={`min-w-full bg-red-600 text-white text-center justify-center text-5xl min-h-16 flex`}
-        >
-          {course.name}{" "}
-          {role === "professor" && (
-            <AddButton
-              onClick={() => setOpenCreateSectionDialog(true)}
-              buttonFeature={"ml-1 mb-2.5 text-gray-300 hover:text-gray-400"}
-            />
-          )}
-        </h1>
+      {course?.image && (
+        <div className={`relative min-w-screen`}>
+          <div className="absolute inset-0 bg-black"></div>
+          <img
+            src={course?.image}
+            alt={course?.name}
+            className={`w-full h-80 drop-shadow object-cover min-w-full transition hover:opacity-40 hover:shadow shadow-xl duration-300`}
+            onMouseEnter={() => setShowTitle(true)}
+            onMouseLeave={() => setShowTitle(false)}
+          ></img>
+          <h2
+            className={`pointer-events-none absolute inset-0 flex items-center justify-center font-bold bg-opacity-50 top-0 text-center text-7xl text-white transition duration-300
+            ${!showTitle && "opacity-0"}`}
+          >
+            {course?.name}
+          </h2>
+        </div>
       )}
+      {/*{course?.name && (*/}
+      {/*  <h1*/}
+      {/*    className={`min-w-full bg-red-600 text-white text-center justify-center text-5xl min-h-16 flex`}*/}
+      {/*  >*/}
+      {/*    {course.name}{" "}*/}
+      {/*    {role === "professor" && (*/}
+      {/*      <AddButton*/}
+      {/*        onClick={() => setOpenCreateSectionDialog(true)}*/}
+      {/*        buttonFeature={"ml-1 mb-2.5 text-gray-300 hover:text-gray-400"}*/}
+      {/*      />*/}
+      {/*    )}*/}
+      {/*  </h1>*/}
+      {/*)}*/}
       <div className={`flex`}>
         <main className="p-6 w-4/5">
-          {course ? (
+           {course ? (
             <div className="flex flex-col gap-y-6">
               {course?.content?.length > 0 ? (
                 course.content.map((section) => (
@@ -154,7 +174,7 @@ const CoursePage = () => {
                   ></Section>
                 ))
               ) : (
-                <h2>No entries available, issue is in coursePage.</h2>
+                <h2>No entries available.</h2>
               )}
             </div>
           ) : (
@@ -162,7 +182,11 @@ const CoursePage = () => {
           )}
         </main>
         <div className={`w-1/5 ml-auto mt-6 mr-3`}>
-          <DescriptionBox></DescriptionBox>
+          {role === "professor" && <ProfessorToolbar
+          courseID={course?.id}
+          onAdd={() => setOpenCreateSectionDialog(true)}></ProfessorToolbar>}
+          <DescriptionBox
+          description={course?.description}></DescriptionBox>
         </div>
       </div>
       <CreateSectionDialog

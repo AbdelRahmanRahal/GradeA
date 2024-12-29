@@ -102,7 +102,6 @@ const Section = ({
             <div className="flex flex-1 gap-2 items-center">
               <EditButton onClick={onEdit}/>
               <RemoveButton onClick={onRemove}/>
-              <button onClick={() => console.log(sectionData)}>Bring Forth Gifts</button>
               <div className="ml-auto">
                 <button
                     className="text-gray-500 hover:text-black mr-4"

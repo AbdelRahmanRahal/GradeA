@@ -103,11 +103,59 @@
       "description": "123123"
     }
   ],
+  "notifications": [
+    {
+      "id": "1",
+      "title": "New Assignment Available",
+      "description": "A new random assignment has been posted. Check it out and have fun!"
+    },
+    {
+      "id": "2",
+      "title": "Upcoming Quiz",
+      "description": "Get ready! There's a quiz on random facts coming up next week."
+    },
+    {
+      "id": "3",
+      "title": "Live Lecture Tomorrow",
+      "description": "Join the live lecture tomorrow at 2:00 PM to learn about randomness in everyday life."
+    },
+    {
+      "id": "4",
+      "title": "Group Project Assigned",
+      "description": "The group project on 'Random Acts of Kindness' has been assigned. Form your teams!"
+    },
+    {
+      "id": "5",
+      "title": "New Reading Material",
+      "description": "New reading material on randomness and probability has been uploaded. Check it out!"
+    },
+    {
+      "id": "6",
+      "title": "Office Hours This Week",
+      "description": "The professor will hold office hours on Wednesday from 10:00 AM - 12:00 PM for any questions."
+    },
+    {
+      "id": "7",
+      "title": "Class Poll: Favorite Random Activity",
+      "description": "Participate in the class poll to vote for your favorite random activity. Results will be shared in the next lecture!"
+    },
+    {
+      "id": "8",
+      "title": "Important Deadline Reminder",
+      "description": "The deadline for submitting your random project is approaching. Submit by Friday!"
+    },
+    {
+      "id": "9",
+      "title": "Course Feedback Survey",
+      "description": "Help us improve the course by filling out the feedback survey. Your thoughts are random, but valuable! LATEST"
+    }
+  ],
   "course": [
     {
       "id": "101",
       "name": "Introduction to Random Stuff",
       "description": "Introduction to doing random stuff, it's so much fun being random..",
+      "image": "https://i.imgflip.com/41j06n.png?a481608",
       "sections": [
         {
           "id": "1",
